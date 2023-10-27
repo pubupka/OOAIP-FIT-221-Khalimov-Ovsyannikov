@@ -1,0 +1,12 @@
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/bin/Debug/net7.0/SpaceBattle.Lib.deps.json
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/bin/Debug/net7.0/SpaceBattle.Lib.dll
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/bin/Debug/net7.0/SpaceBattle.Lib.pdb
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/SpaceBattle.Lib.csproj.AssemblyReference.cache
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/SpaceBattle.Lib.GeneratedMSBuildEditorConfig.editorconfig
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/SpaceBattle.Lib.AssemblyInfoInputs.cache
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/SpaceBattle.Lib.AssemblyInfo.cs
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/SpaceBattle.Lib.csproj.CoreCompileInputs.cache
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/SpaceBattle.Lib.dll
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/refint/SpaceBattle.Lib.dll
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/SpaceBattle.Lib.pdb
+/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/obj/Debug/net7.0/ref/SpaceBattle.Lib.dll
