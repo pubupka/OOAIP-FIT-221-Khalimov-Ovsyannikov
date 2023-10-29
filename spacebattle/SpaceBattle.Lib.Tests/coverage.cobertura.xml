@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<coverage line-rate="1" branch-rate="0.5" version="1.9" timestamp="1698565656" lines-covered="26" lines-valid="26" branches-covered="1" branches-valid="2">
+  <sources>
+    <source>/home/ubuntu/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/</source>
+  </sources>
+  <packages>
+    <package name="SpaceBattle.Lib" line-rate="1" branch-rate="0.5" complexity="9">
+      <classes>
+        <class name="SpaceBattle.Rational" filename="Rational.cs" line-rate="1" branch-rate="0.5" complexity="7">
+          <methods>
+            <method name="Equals" signature="(System.Object)" line-rate="1" branch-rate="0.5" complexity="2">
+              <lines>
+                <line number="19" hits="2" branch="False" />
+                <line number="20" hits="2" branch="True" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="9" type="jump" coverage="50%" />
+                  </conditions>
+                </line>
+                <line number="21" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="GetHashCode" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="23" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="op_Addition" signature="(SpaceBattle.Rational,SpaceBattle.Rational)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="26" hits="2" branch="False" />
+                <line number="27" hits="2" branch="False" />
+                <line number="28" hits="2" branch="False" />
+                <line number="29" hits="2" branch="False" />
+              </lines>
+            </method>
+            <method name="op_Equality" signature="(SpaceBattle.Rational,SpaceBattle.Rational)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="32" hits="1" branch="False" />
+                <line number="33" hits="1" branch="False" />
+                <line number="34" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name="op_Inequality" signature="(SpaceBattle.Rational,SpaceBattle.Rational)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="37" hits="1" branch="False" />
+                <line number="38" hits="1" branch="False" />
+                <line number="39" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(System.Int32)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="11" hits="15" branch="False" />
+                <line number="13" hits="15" branch="False" />
+                <line number="14" hits="15" branch="False" />
+                <line number="15" hits="15" branch="False" />
+                <line number="16" hits="15" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="19" hits="2" branch="False" />
+            <line number="20" hits="2" branch="True" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="9" type="jump" coverage="50%" />
+              </conditions>
+            </line>
+            <line number="21" hits="2" branch="False" />
+            <line number="23" hits="2" branch="False" />
+            <line number="26" hits="2" branch="False" />
+            <line number="27" hits="2" branch="False" />
+            <line number="28" hits="2" branch="False" />
+            <line number="29" hits="2" branch="False" />
+            <line number="32" hits="1" branch="False" />
+            <line number="33" hits="1" branch="False" />
+            <line number="34" hits="1" branch="False" />
+            <line number="37" hits="1" branch="False" />
+            <line number="38" hits="1" branch="False" />
+            <line number="39" hits="1" branch="False" />
+            <line number="11" hits="15" branch="False" />
+            <line number="13" hits="15" branch="False" />
+            <line number="14" hits="15" branch="False" />
+            <line number="15" hits="15" branch="False" />
+            <line number="16" hits="15" branch="False" />
+          </lines>
+        </class>
+        <class name="SpaceBattle.TurnCommand" filename="Turnable.cs" line-rate="1" branch-rate="1" complexity="2">
+          <methods>
+            <method name="Execute" signature="()" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="22" hits="4" branch="False" />
+                <line number="23" hits="4" branch="False" />
+                <line number="24" hits="1" branch="False" />
+              </lines>
+            </method>
+            <method name=".ctor" signature="(SpaceBattle.ITurnable)" line-rate="1" branch-rate="1" complexity="1">
+              <lines>
+                <line number="17" hits="4" branch="False" />
+                <line number="18" hits="4" branch="False" />
+                <line number="19" hits="4" branch="False" />
+                <line number="20" hits="4" branch="False" />
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="22" hits="4" branch="False" />
+            <line number="23" hits="4" branch="False" />
+            <line number="24" hits="1" branch="False" />
+            <line number="17" hits="4" branch="False" />
+            <line number="18" hits="4" branch="False" />
+            <line number="19" hits="4" branch="False" />
+            <line number="20" hits="4" branch="False" />
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
