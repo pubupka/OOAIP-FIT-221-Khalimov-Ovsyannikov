@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace 
+namespace SpaceBattle
 {
-    public interface Turnable
+    public interface ITurnable
     {
         public Rational angle { get; set; }
         public Rational delta{ get; }
