@@ -31,5 +31,11 @@ namespace SpaceBattle.Lib.Tests
             Rational delta = new Rational(45);
             Assert.Equal(angle.GetHashCode(), delta.GetHashCode());
         }
+        [Fact]
+        public void Rational_Equals_Null()
+        {
+            Rational angle = new Rational(45);
+            Assert.False(angle.Equals(null));
+        }
     }
 }

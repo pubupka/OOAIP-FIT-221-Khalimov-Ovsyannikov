@@ -17,8 +17,7 @@ namespace SpaceBattle
 
         public override bool Equals(object? obj)
         {
-            Rational r = obj as Rational;
-            return this.numerator == r.numerator;
+            return obj is Rational r && this.numerator == r.numerator;
         }                                           
         
         public override int GetHashCode() => HashCode.Combine(numerator, denominator);
