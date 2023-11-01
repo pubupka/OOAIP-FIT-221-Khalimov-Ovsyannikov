@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="1" branch-rate="1" version="1.9" timestamp="1698839893" lines-covered="27" lines-valid="27" branches-covered="0" branches-valid="0">
+<coverage line-rate="1" branch-rate="1" version="1.9" timestamp="1698840184" lines-covered="27" lines-valid="27" branches-covered="0" branches-valid="0">
   <sources>
     <source>/home/ubuntu/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/</source>
   </sources>
