@@ -1,9 +1,7 @@
 name: Lab1 straight-line movement
 
 on:
-  workflow_dispatch:
-  pull_request:
-    branches: ["master"]
+  [workflow_dispatch, pull_request]
 
 jobs:
   build:
@@ -28,3 +26,4 @@ jobs:
 
       - name: SpaceBattle test
         run: cd ./spacebattle/SpaceBattle.Lib.Tests/ && dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=json
+        
