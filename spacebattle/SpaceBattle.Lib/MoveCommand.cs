@@ -1,6 +1,6 @@
-public class MoveCommand : ICommand
+﻿public class MoveCommand : ICommand
 {
-    IMovable movable;
+    private readonly IMovable movable;
     public MoveCommand(IMovable movable)
     {
         this.movable = movable;

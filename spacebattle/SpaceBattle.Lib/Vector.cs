@@ -1,49 +1,40 @@
-public class Vector
+﻿public class Vector
 {
-    int[] array;
+    private readonly int[] array;
     public Vector(int[] array)
     {
         this.array = array;
     }
 
-    public static Vector operator+(Vector v1, Vector v2)
+    public static Vector operator +(Vector v1, Vector v2)
     {
-        int[] array = new int[v1.array.Length];
+        var arr = v1.array.Select((value, index) => value + v2.array[index]).ToArray();
 
-        for (int i=0; i < array.Length; i++)
-            array[i] = v1.array[i] + v2.array[i];
-
-        return new Vector(array);
+        return new Vector(arr);
     }
 
     // == сравнивает ссылки, а equals объекты
     public override bool Equals(object? obj)
     {
-        
-        if (obj == null || this.GetType() != obj.GetType())
+        if (obj == null)
         {
             return false;
         }
-        
-        return base.Equals(obj);
+
+        return obj.GetType() == typeof(Vector) && Enumerable.SequenceEqual(((Vector)obj).array, array);
     }
-    
+
     public override int GetHashCode()
     {
-        return this.array.GetHashCode();
+        return array.GetHashCode();
     }
 
-    public static bool operator==(Vector v1, Vector v2)
+    public static bool operator ==(Vector v1, Vector v2)
     {
-        for (int i=0; i < v1.array.Length; i++)
-        {
-            if (v1.array[i] != v2.array[i])
-                return false;
-        }
-        return true;
+        return v1.array == v2.array;
     }
 
-    public static bool operator!=(Vector v1, Vector v2)
+    public static bool operator !=(Vector v1, Vector v2)
     {
         return !(v1 == v2);
     }

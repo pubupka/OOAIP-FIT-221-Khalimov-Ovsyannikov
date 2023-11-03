@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "8n2x/v1UFqNdzBeBapL7mM/0HkgSop+gLrol62wJnDmv4YPK2WeOcQbs8X8USKc04tnW8ZulXtiT5liQ5TGLkw==",
+  "dgSpecHash": "y0wINAcoKNAw598mcCGkBY7z4Tr+00lpcVMQhTvipZ3cmyXky3/hsC9S8+fm/RH/Lg7DBc9Ltun3vyNzzHOQkQ==",
   "success": true,
   "projectFilePath": "/home/pubupka/projects/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib.Tests/SpaceBattle.Lib.Tests.csproj",
   "expectedPackageFiles": [
     "/home/pubupka/.nuget/packages/castle.core/5.1.1/castle.core.5.1.1.nupkg.sha512",
     "/home/pubupka/.nuget/packages/coverlet.collector/3.1.2/coverlet.collector.3.1.2.nupkg.sha512",
+    "/home/pubupka/.nuget/packages/coverlet.msbuild/6.0.0/coverlet.msbuild.6.0.0.nupkg.sha512",
     "/home/pubupka/.nuget/packages/microsoft.codecoverage/17.3.2/microsoft.codecoverage.17.3.2.nupkg.sha512",
     "/home/pubupka/.nuget/packages/microsoft.csharp/4.0.1/microsoft.csharp.4.0.1.nupkg.sha512",
     "/home/pubupka/.nuget/packages/microsoft.net.test.sdk/17.3.2/microsoft.net.test.sdk.17.3.2.nupkg.sha512",
