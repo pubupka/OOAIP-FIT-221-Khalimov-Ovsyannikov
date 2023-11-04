@@ -19,7 +19,7 @@ jobs:
         run: dotnet restore ./spacebattle/SpaceBattle.Lib
 
       - name: Build and format
-        run: dotnet build ./spacebattle/SpaceBattle.Lib --no-restore /p:ContinuousIntegrationBuild=true && dotnet format
+        run: cd spacebattle && dotnet build --no-restore /p:ContinuousIntegrationBuild=true && dotnet format && cd ..
 
       - name: Test
         run: ./spacebattle/SpaceBattle.Lib.Tests ./spacebattle/SpaceBattle.Lib.Tests/bin/Debug/net7.0/SpaceBattle.Lib.Tests.dll
