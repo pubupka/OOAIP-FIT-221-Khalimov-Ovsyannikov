@@ -19,7 +19,7 @@ jobs:
         run: dotnet restore ./spacebattle/SpaceBattle.Lib
 
       - name: Build
-        run: cd spacebattle && dotnet build --no-restore /p:ContinuousIntegrationBuild=true && cd ..
+        run: cd spacebattle/SpaceBattle.Lib && dotnet build --no-restore /p:ContinuousIntegrationBuild=true && cd ../..
 
       - name: Format
         run: cd spacebattle && dotnet format ./spacebattle.sln && cd ..
