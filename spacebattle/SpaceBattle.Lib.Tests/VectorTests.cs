@@ -3,7 +3,7 @@
 public class VectorTests
 {
     [Fact]
-    public void GetHashCodeTest()
+    public void Vector_GetHashCode()
     {
         var arr = new int[] { 1, 5 };
         var test = new Vector(arr);
@@ -11,7 +11,7 @@ public class VectorTests
     }
 
     [Fact]
-    public void PassNullInCtor()
+    public void Vector_PassNullInCtor()
     {
         var arr = new int[] { 1, 5 };
         var test = new Vector(arr);
@@ -19,7 +19,7 @@ public class VectorTests
     }
 
     [Fact]
-    public void Equality()
+    public void Vector_Equality()
     {
         // Ссылки и содержимое совпадают
         var arr = new int[] { 7, 8 };
@@ -29,7 +29,7 @@ public class VectorTests
     }
 
     [Fact]
-    public void Inequality()
+    public void Vector_Inequality()
     {
         // Содержимое объектов совпадает, но ссылки нет.
         var test1 = new Vector(new int[] { 1, 2 });
@@ -38,7 +38,7 @@ public class VectorTests
     }
 
     [Fact]
-    public void Equals_PassNotVectorType()
+    public void Vector_Equals_PassNotVectorType()
     {
         var num = 2;
         var test = new Vector(new int[] { 1, 2 });

@@ -7,7 +7,7 @@ public class MovableTests
     // 3. Не читается Velocity
     // 4. Не пишется в Position
     [Fact]
-    public void MoveCommand_AllGood()
+    public void MoveCommand_StraightLineMovementComplete()
     {
         /*
         Пишется и читается из Position,
