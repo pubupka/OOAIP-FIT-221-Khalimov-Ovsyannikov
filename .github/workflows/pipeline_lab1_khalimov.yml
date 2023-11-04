@@ -24,11 +24,8 @@ jobs:
       - name: Format
         run: cd spacebattle && dotnet format ./spacebattle.sln && cd ..
 
-      - name: Test
-        run: ./spacebattle/SpaceBattle.Lib.Tests ./spacebattle/SpaceBattle.Lib.Tests/bin/Debug/net7.0/SpaceBattle.Lib.Tests.dll
-
       - name: Verify format
         run: cd spacebattle && dotnet format --verify-no-changes && cd ..
 
       - name: SpaceBattle test
-        run: cd ./spacebattle/SpaceBattle.Lib.Tests/ && dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=json
+        run: cd ./spacebattle/SpaceBattle.Lib.Tests/ && dotnet test /p:CollectCoverage=true
