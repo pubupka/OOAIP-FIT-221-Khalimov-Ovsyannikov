@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="1" branch-rate="1" version="1.9" timestamp="1699102308" lines-covered="56" lines-valid="56" branches-covered="12" branches-valid="12">
+<coverage line-rate="1" branch-rate="1" version="1.9" timestamp="1699167315" lines-covered="58" lines-valid="58" branches-covered="12" branches-valid="12">
   <sources>
     <source>/home/ubuntu/OOAIP-FIT-221-Khalimov-Ovsyannikov/spacebattle/SpaceBattle.Lib/</source>
   </sources>
@@ -42,8 +42,8 @@
             <method name="Minimize" signature="()" line-rate="1" branch-rate="1" complexity="1">
               <lines>
                 <line number="52" hits="26" branch="False" />
-                <line number="54" hits="878" branch="False" />
-                <line number="55" hits="998" branch="False" />
+                <line number="54" hits="906" branch="False" />
+                <line number="55" hits="1032" branch="False" />
                 <line number="56" hits="26" branch="False" />
                 <line number="58" hits="26" branch="False" />
                 <line number="59" hits="26" branch="False" />
@@ -74,28 +74,30 @@
                 <line number="72" hits="2" branch="False" />
                 <line number="73" hits="2" branch="False" />
                 <line number="74" hits="2" branch="False" />
+                <line number="75" hits="2" branch="False" />
+                <line number="76" hits="2" branch="False" />
               </lines>
             </method>
             <method name="op_Equality" signature="(SpaceBattle.Rational,SpaceBattle.Rational)" line-rate="1" branch-rate="1" complexity="2">
               <lines>
-                <line number="77" hits="2" branch="False" />
-                <line number="78" hits="2" branch="True" condition-coverage="100% (2/2)">
+                <line number="79" hits="2" branch="False" />
+                <line number="80" hits="2" branch="True" condition-coverage="100% (2/2)">
                   <conditions>
                     <condition number="13" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="79" hits="2" branch="False" />
+                <line number="81" hits="2" branch="False" />
               </lines>
             </method>
             <method name="op_Inequality" signature="(SpaceBattle.Rational,SpaceBattle.Rational)" line-rate="1" branch-rate="1" complexity="2">
               <lines>
-                <line number="82" hits="4" branch="False" />
-                <line number="83" hits="4" branch="True" condition-coverage="100% (2/2)">
+                <line number="84" hits="4" branch="False" />
+                <line number="85" hits="4" branch="True" condition-coverage="100% (2/2)">
                   <conditions>
                     <condition number="13" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="84" hits="4" branch="False" />
+                <line number="86" hits="4" branch="False" />
               </lines>
             </method>
             <method name=".ctor" signature="(System.Int32,System.Int32)" line-rate="1" branch-rate="1" complexity="1">
@@ -136,8 +138,8 @@
             <line number="48" hits="23" branch="False" />
             <line number="49" hits="24" branch="False" />
             <line number="52" hits="26" branch="False" />
-            <line number="54" hits="878" branch="False" />
-            <line number="55" hits="998" branch="False" />
+            <line number="54" hits="906" branch="False" />
+            <line number="55" hits="1032" branch="False" />
             <line number="56" hits="26" branch="False" />
             <line number="58" hits="26" branch="False" />
             <line number="59" hits="26" branch="False" />
@@ -156,20 +158,22 @@
             <line number="72" hits="2" branch="False" />
             <line number="73" hits="2" branch="False" />
             <line number="74" hits="2" branch="False" />
-            <line number="77" hits="2" branch="False" />
-            <line number="78" hits="2" branch="True" condition-coverage="100% (2/2)">
-              <conditions>
-                <condition number="13" type="jump" coverage="100%" />
-              </conditions>
-            </line>
+            <line number="75" hits="2" branch="False" />
+            <line number="76" hits="2" branch="False" />
             <line number="79" hits="2" branch="False" />
-            <line number="82" hits="4" branch="False" />
-            <line number="83" hits="4" branch="True" condition-coverage="100% (2/2)">
+            <line number="80" hits="2" branch="True" condition-coverage="100% (2/2)">
               <conditions>
                 <condition number="13" type="jump" coverage="100%" />
               </conditions>
             </line>
+            <line number="81" hits="2" branch="False" />
             <line number="84" hits="4" branch="False" />
+            <line number="85" hits="4" branch="True" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="13" type="jump" coverage="100%" />
+              </conditions>
+            </line>
+            <line number="86" hits="4" branch="False" />
             <line number="14" hits="25" branch="False" />
             <line number="15" hits="25" branch="False" />
             <line number="16" hits="25" branch="False" />
