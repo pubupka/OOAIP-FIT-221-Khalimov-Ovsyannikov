@@ -7,7 +7,7 @@ namespace SpaceBattle.Lib
 {
     public interface IEndable
     {
-        public IUObject Target { get; }
-        public IEnumerable<string> Keys { get; }
+        public IUObject target { get; }
+        public IDictionary<string, int> propertyAndValue { get; }
     }
 }
