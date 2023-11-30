@@ -15,11 +15,10 @@ namespace SpaceBattle.Lib
 
         public void Execute()
         {
-            _endable.propertyAndValue.ToList().ForEach(pair =>IoC.Resolve<ICommand>("Game.UObject.DeleteProperty", _endable.target, pair.Key, pair.Value).Execute());
-            IoC.Resolve<IQueue>("Queue.DeleteAllCommands").Take();
-            IoC.Resolve<IInjectable>("Game.UObject.GetProperty", _endable.target, "Movement").Inject(IoC.Resolve<ICommand>("Game.Command.EmptyCommand"));
-            var emptyCommand = IoC.Resolve<ICommand>("Command.Empty", new EmptyCommand());
-            IoC.Resolve<IQueue>("Queue.DeleteAllCommands").Add(emptyCommand);
+            IoC.Resolve<string>("Game.UObject.DeleteProperty", _endable.target, _endable.property);
+            var command = _endable.command;
+            var emptyCommand = IoC.Resolve<ICommand>("Game.Command.EmptyCommand");
+            IoC.Resolve<IInjectable>("Game.Command.Inject", command, emptyCommand);
         }
     }
 }
