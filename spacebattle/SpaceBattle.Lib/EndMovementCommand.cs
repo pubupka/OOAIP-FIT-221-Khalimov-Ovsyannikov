@@ -1,15 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
-using Hwdtech.Ioc;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
     public class EndMovementCommand
     {
-        private IEndable _endable;
+        private readonly IEndable _endable;
 
         public EndMovementCommand(IEndable endable) => _endable = endable;
 
