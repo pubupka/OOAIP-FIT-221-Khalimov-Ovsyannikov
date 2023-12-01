@@ -1,4 +1,7 @@
-﻿namespace SpaceBattle.Lib
+﻿using Hwdtech;
+using Hwdtech.Ioc;
+
+namespace SpaceBattle.Lib
 {
     public class EndMovementCommand
     {
