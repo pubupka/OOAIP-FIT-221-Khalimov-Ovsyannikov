@@ -19,14 +19,14 @@ public class StartMoveCommand : ICommand
         ).Execute());
 
         var cmd = IoC.Resolve<ICommand>(
-            "LongOperations.Move",
+            "Game.Commands.Move",
             _startable.Target
         );
 
         IoC.Resolve<ICommand>(
-            "Properties.Set",
+            "SetProperties",
             _startable.Target,
-            "LongOperation.Move",
+            "Game.Commands.Move",
             cmd
         ).Execute();
 
