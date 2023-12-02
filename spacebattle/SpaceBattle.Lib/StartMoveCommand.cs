@@ -12,7 +12,7 @@ public class StartMoveCommand : ICommand
     public void Execute()
     {
         _startable.Properties.ForEach(property => IoC.Resolve<ICommand>(
-            "Properties.Set",
+            "SetProperties",
             _startable.Target,
             property.Item1,
             property.Item2
@@ -30,8 +30,6 @@ public class StartMoveCommand : ICommand
             cmd
         ).Execute();
 
-        IoC.Resolve<IQueue>(
-            "Game.Queue"
-        ).Add(cmd);
+        IoC.Resolve<IQueue>("Game.Queue").Add(cmd);
     }
 }
