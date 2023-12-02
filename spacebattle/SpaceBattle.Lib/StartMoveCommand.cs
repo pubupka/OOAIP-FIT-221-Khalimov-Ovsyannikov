@@ -3,7 +3,7 @@ using SpaceBattle.Lib;
 
 public class StartMoveCommand : ICommand
 {
-    IMoveStartable _startable;
+    private readonly IMoveStartable _startable;
     public StartMoveCommand(IMoveStartable startable)
     {
         _startable = startable;
@@ -30,6 +30,8 @@ public class StartMoveCommand : ICommand
             cmd
         ).Execute();
 
-        IoC.Resolve<IQueue>
+        IoC.Resolve<IQueue>(
+            "Game.Queue"
+        ).Add(cmd);
     }
 }
