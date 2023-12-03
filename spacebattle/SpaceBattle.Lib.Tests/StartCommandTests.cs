@@ -12,7 +12,7 @@ public class StartCommandTests
 
         IoC.Resolve<ICommand>(
             "IoC.Register", 
-            "SetProperties",
+            "Game.IUObject.SetProperties",
             (object[] args) =>
             {
                 var target = (IUObject)args[0];
@@ -22,13 +22,13 @@ public class StartCommandTests
             }
         ).Execute();
 
-        var MoveCommand = new Mock<MoveCommand>();
+        var LongMoveCommand = new Mock<ICommand>();
         IoC.Resolve<ICommand>(
             "IoC.Register", 
-            "Game.Commands.Move",
+            "Game.Commands.LongMove",
             (object[] args) =>
             {
-               return MoveCommand;
+               return LongMoveCommand;
             }
         ).Execute();
 

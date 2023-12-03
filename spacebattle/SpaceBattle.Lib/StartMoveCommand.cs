@@ -12,21 +12,21 @@ public class StartMoveCommand : ICommand
     public void Execute()
     {
         _startable.Properties.ForEach(property => IoC.Resolve<ICommand>(
-            "SetProperties",
+            "Game.IUObject.SetProperties",
             _startable.Target,
             property.Item1,
             property.Item2
         ).Execute());
 
         var cmd = IoC.Resolve<ICommand>(
-            "Game.Commands.Move",
+            "Game.Commands.LongMove",
             _startable.Target
         );
 
         IoC.Resolve<ICommand>(
-            "SetProperties",
+            "Game.IUObject.SetProperties",
             _startable.Target,
-            "Game.Commands.Move",
+            "Game.Commands.LongMove",
             cmd
         ).Execute();
 
