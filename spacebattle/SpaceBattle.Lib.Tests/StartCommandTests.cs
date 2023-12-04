@@ -15,10 +15,10 @@ public class StartCommandTests
             "Game.IUObject.SetProperties",
             (object[] args) =>
             {
-                var target = (IUObject)args[0];
-                var properties = (List<Tuple<string, object>>)args[1];
+                var order = (IUObject)args[0];
+                var propertiesOfOrder = (Dictionary<string, object>)args[1];
 
-                properties.ForEach(property => target.SetProperty(property.Item1, property.Item2));
+                propertiesOfOrder.ToList().ForEach(property => order.SetProperty(property.Key, property.Value));
             }
         ).Execute();
 
