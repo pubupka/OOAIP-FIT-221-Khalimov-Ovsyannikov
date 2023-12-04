@@ -10,20 +10,22 @@ public class StartMoveCommand_Tests
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-        IoC.Resolve<ICommand>(
+        IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register", 
             "Game.IUObject.SetProperty",
             (object[] args) =>
             {
                 var order = (IUObject)args[0];
-                var property = (KeyValuePair<string, object>)args[1];
+                var key = (string)args[1];
+                var value = args[2];
 
-                order.SetProperty(property.Key, property.Value);
+                order.SetProperty(key, value);
+                return new object();
             }
         ).Execute();
 
-        var LongMoveCommand = new Mock<ICommand>();
-        IoC.Resolve<ICommand>(
+        var LongMoveCommand = new Mock<ICommand>().Object;
+        IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register", 
             "Game.Commands.LongMove",
             (object[] args) =>
@@ -32,8 +34,8 @@ public class StartMoveCommand_Tests
             }
         ).Execute();
 
-        var queue = new Mock<IQueue>();
-        IoC.Resolve<ICommand>(
+        var queue = new Mock<IQueue>().Object;
+        IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register", 
             "Game.Queue",
             (object[] args) =>
