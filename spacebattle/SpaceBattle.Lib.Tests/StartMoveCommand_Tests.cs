@@ -33,16 +33,6 @@ public class StartMoveCommand_Tests
                return LongMoveCommand;
             }
         ).Execute();
-
-        var queue = new Mock<IQueue>().Object;
-        IoC.Resolve<Hwdtech.ICommand>(
-            "IoC.Register", 
-            "Game.Queue",
-            (object[] args) =>
-            {
-               return queue;
-            }
-        ).Execute();
     }
 
     [Fact]
@@ -51,6 +41,18 @@ public class StartMoveCommand_Tests
         var startable = new Mock<IMoveStartable>();
         var order = new Mock<IUObject>();
         var orderDict = new Dictionary<string, object>();
+
+        var queue = new Mock<IQueue>();
+        var realQueue = new Queue<ICommand>();
+        queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register", 
+            "Game.Queue",
+            (object[] args) =>
+            {
+               return queue.Object;
+            }
+        ).Execute();
 
         var properties = new Dictionary<string, object> {
             // { "velocity", new Vector( new int[] { 1, 2 }) },
@@ -68,5 +70,6 @@ public class StartMoveCommand_Tests
 
         Assert.Contains("id", orderDict.Keys);
         Assert.Contains("Game.Commands.LongMove", orderDict.Keys);
+        Assert.NotEmpty(realQueue);
     }
 }
