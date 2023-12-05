@@ -122,4 +122,32 @@ public class StartMoveCommand_Tests
 
         Assert.Empty(_realQueue);
     }
+
+    [Fact]
+    public void StartMoveCommand_CantReadPropertiesOfOrder_FromStartable()
+    {
+        var startable = new Mock<IMoveStartable>();
+        startable.SetupGet(s => s.PropertiesOfOrder).Throws(new NotImplementedException());
+        var startMoveCommand = new StartMoveCommand(startable.Object);
+
+        Assert.Throws<NotImplementedException>(startMoveCommand.Execute);
+    }
+
+    [Fact]
+    public void StartMoveCommand_CantReadOrder_FromStartable()
+    {
+        var startable = new Mock<IMoveStartable>();
+        startable.SetupGet(s => s.Order).Throws(new NotImplementedException());
+        var properties = new Dictionary<string, object> {
+            // { "velocity", new Vector( new int[] { 1, 2 }) },
+            { "position", new Vector( new int[] { 2, 1 }) },
+            // { "id", 1 },
+            //{ "action", new Mock<ICommand>() }
+        };
+
+        startable.SetupGet(s => s.PropertiesOfOrder).Returns(properties);
+        var startMoveCommand = new StartMoveCommand(startable.Object);
+
+        Assert.Throws<NotImplementedException>(startMoveCommand.Execute);
+    }
 }
