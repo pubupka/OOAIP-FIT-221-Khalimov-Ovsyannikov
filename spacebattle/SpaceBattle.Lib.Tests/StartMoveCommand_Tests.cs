@@ -72,4 +72,71 @@ public class StartMoveCommand_Tests
         Assert.Contains("Game.Commands.LongMove", orderDict.Keys);
         Assert.NotEmpty(realQueue);
     }
+
+    /*
+    
+    добавить тесты
+
+    1) не изменяются свойства у приказа
+    2) команда не кладётся в очередь
+
+    */
+    [Fact]
+    public void StartMoveCommand_CantSetProperties()
+    {
+        var startable = new Mock<IMoveStartable>();
+        var order = new Mock<IUObject>();
+        var orderDict = new Dictionary<string, object>();
+
+        var properties = new Dictionary<string, object> {
+            // { "velocity", new Vector( new int[] { 1, 2 }) },
+            { "position", new Vector( new int[] { 2, 1 }) },
+            // { "id", 1 },
+            // { "action", new Mock<ICommand>() }
+        };
+
+        startable.SetupGet(s => s.PropertiesOfOrder).Returns(properties);
+        startable.SetupGet(s => s.Order).Returns(order.Object);
+        order.Setup(o => o.SetProperty(It.IsAny<string>(), It.IsAny<object>())).Callback(() => throw new NotImplementedException());
+
+        var startMoveCommand = new StartMoveCommand(startable.Object);
+
+        Assert.Throws<NotImplementedException>(startMoveCommand.Execute);
+    }
+
+    [Fact]
+    public void StartMoveCommand_CantPutCommandInQueue()
+    {
+        var startable = new Mock<IMoveStartable>();
+        var order = new Mock<IUObject>();
+        var orderDict = new Dictionary<string, object>();
+
+        var queue = new Mock<IQueue>();
+        var realQueue = new Queue<ICommand>();
+        queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(() => {});
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register", 
+            "Game.Queue",
+            (object[] args) =>
+            {
+               return queue.Object;
+            }
+        ).Execute();
+
+        var properties = new Dictionary<string, object> {
+            // { "velocity", new Vector( new int[] { 1, 2 }) },
+            // { "position", new Vector( new int[] { 2, 1 }) },
+            { "id", 1 },
+            // { "action", new Mock<ICommand>() }
+        };
+
+        startable.SetupGet(s => s.PropertiesOfOrder).Returns(properties);
+        startable.SetupGet(s => s.Order).Returns(order.Object);
+        order.Setup(o => o.SetProperty(It.IsAny<string>(), It.IsAny<object>())).Callback<string, object>(orderDict.Add);
+
+        var startMoveCommand = new StartMoveCommand(startable.Object);
+        startMoveCommand.Execute();
+
+        Assert.Empty(realQueue);
+    }
 }
