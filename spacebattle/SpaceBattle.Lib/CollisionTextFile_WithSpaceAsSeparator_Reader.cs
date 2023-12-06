@@ -1,6 +1,6 @@
 using Hwdtech;
 
-public class CollisionTextFile_WithSpaceAsSeparator_Reader: IVectorsFromFileReader
+public class CollisionTextFile_WithSpaceAsSeparator_Reader: IArraysFromFileReader
 {
     private readonly string _path;
     
@@ -9,13 +9,8 @@ public class CollisionTextFile_WithSpaceAsSeparator_Reader: IVectorsFromFileRead
         _path = path;
     }
 
-    public List<Vector> ReadVectors()
+    public List<int[]> ReadArrays()
     {
-        var lines = IoC.Resolve<List<string>>("Game.Collisions.LoadData", _path);
-
-        var result_array = IoC.Resolve<List<Vector>>("Game.Collisions.ConvertDataToListOfVectors", lines);
-        // Vector[] result_array;
-        // result_array = file.ToList().ForEach(line => line.Split(" "))
-        return result_array;
+        return IoC.Resolve<List<int[]>>("Game.Collisions.LoadCollisionsTextFile", _path);
     }
 }
