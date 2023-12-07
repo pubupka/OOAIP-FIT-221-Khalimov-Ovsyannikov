@@ -5,12 +5,10 @@ namespace SpaceBattle.Lib.Tests;
 
 public class StartMoveCommand_Tests
 {
-    private static readonly Mock<IQueue> s_queue = new();
-    private static readonly Queue<ICommand> s_realQueue = new();
-
-    static StartMoveCommand_Tests()
+    public StartMoveCommand_Tests()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
@@ -35,43 +33,41 @@ public class StartMoveCommand_Tests
                 return LongMoveCommand;
             }
         ).Execute();
-
-        s_queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(s_realQueue.Enqueue);
-        IoC.Resolve<Hwdtech.ICommand>(
-            "IoC.Register",
-            "Game.Queue",
-            (object[] args) =>
-            {
-                return s_queue.Object;
-            }
-        ).Execute();
     }
 
     [Fact]
     public void StartMoveCommand_Positive()
     {
+        var queue = new Mock<IQueue>();
+        var realQueue = new Queue<ICommand>();
+        queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register",
+            "Game.Queue",
+            (object[] args) =>
+            {
+                return queue.Object;
+            }
+        ).Execute();
+
         var startable = new Mock<IMoveStartable>();
         var order = new Mock<IUObject>();
         var orderDict = new Dictionary<string, object>();
-
         var properties = new Dictionary<string, object> {
-            // { "velocity", new Vector( new int[] { 1, 2 }) },
-            // { "position", new Vector( new int[] { 2, 1 }) },
             { "id", 1 },
-            // { "action", new Mock<ICommand>() }
         };
 
         startable.SetupGet(s => s.PropertiesOfOrder).Returns(properties);
         startable.SetupGet(s => s.Order).Returns(order.Object);
         order.Setup(o => o.SetProperty(It.IsAny<string>(), It.IsAny<object>())).Callback<string, object>(orderDict.Add);
-        s_queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(s_realQueue.Enqueue);
+        queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
 
         var startMoveCommand = new StartMoveCommand(startable.Object);
         startMoveCommand.Execute();
 
         Assert.Contains("id", orderDict.Keys);
         Assert.Contains("Game.Commands.LongMove", orderDict.Keys);
-        Assert.NotEmpty(s_realQueue);
+        Assert.NotEmpty(realQueue);
     }
 
     [Fact]
@@ -82,10 +78,7 @@ public class StartMoveCommand_Tests
         var orderDict = new Dictionary<string, object>();
 
         var properties = new Dictionary<string, object> {
-            // { "velocity", new Vector( new int[] { 1, 2 }) },
             { "position", new Vector( new int[] { 2, 1 }) },
-            // { "id", 1 },
-            // { "action", new Mock<ICommand>() }
         };
 
         startable.SetupGet(s => s.PropertiesOfOrder).Returns(properties);
@@ -100,16 +93,22 @@ public class StartMoveCommand_Tests
     [Fact]
     public void StartMoveCommand_CantPutCommandInQueue()
     {
+        var queue = new Mock<IQueue>();
+        var realQueue = new Queue<ICommand>();
+        queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(() => {});
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register",
+            "Game.Queue",
+            (object[] args) =>
+            {
+                return queue.Object;
+            }
+        ).Execute();
+
         var startable = new Mock<IMoveStartable>();
         var order = new Mock<IUObject>();
         var orderDict = new Dictionary<string, object>();
-
-        s_queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(() => { });
-
         var properties = new Dictionary<string, object> {
-            // { "velocity", new Vector( new int[] { 1, 2 }) },
-            // { "position", new Vector( new int[] { 2, 1 }) },
-            // { "id", 1 },
             { "action", new Mock<ICommand>() }
         };
 
@@ -120,7 +119,7 @@ public class StartMoveCommand_Tests
         var startMoveCommand = new StartMoveCommand(startable.Object);
         startMoveCommand.Execute();
 
-        Assert.Empty(s_realQueue);
+        Assert.Empty(realQueue);
     }
 
     [Fact]
@@ -139,10 +138,7 @@ public class StartMoveCommand_Tests
         var startable = new Mock<IMoveStartable>();
         startable.SetupGet(s => s.Order).Throws(new NotImplementedException());
         var properties = new Dictionary<string, object> {
-            // { "velocity", new Vector( new int[] { 1, 2 }) },
             { "position", new Vector( new int[] { 2, 1 }) },
-            // { "id", 1 },
-            //{ "action", new Mock<ICommand>() }
         };
 
         startable.SetupGet(s => s.PropertiesOfOrder).Returns(properties);
