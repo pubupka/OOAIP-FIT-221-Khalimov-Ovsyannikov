@@ -5,9 +5,9 @@ public class BuildCollisionTreeCommand: ICommand
 {
     private readonly List<int[]> _arrays;
 
-    public BuildCollisionTreeCommand(string path)
+    public BuildCollisionTreeCommand(List<int[]> arrays)
     {
-        _arrays = IoC.Resolve<CollisionTextFile_WithSpaceAsSeparator_Reader>("Game.Collisions.TreeBuilder", path).ReadArrays();
+        _arrays = arrays;
     }
 
     public void Execute()
@@ -17,11 +17,11 @@ public class BuildCollisionTreeCommand: ICommand
             array.ToList().ForEach(num => {
                 _ = node.ContainsKey(num) ? node[num] : node[num] = new Hashtable();
                 // if (!node.ContainsKey(num))
-                // {
+                // {  проверку вынести в отдельное место, как варик доопределить приватный метод, аналог tryadd, который всегда будет возвращать не null
                 //     node.Add(num, new Hashtable());
                 // }
 
-                node = (Hashtable)node[num]!;
+                node = (Hashtable)node[num];
             });
         });
     }
