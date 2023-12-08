@@ -15,7 +15,9 @@ public class BuildCollisionTreeCommand: ICommand
         _arrays.ForEach(array => {
             var node = IoC.Resolve<Hashtable>("Game.Collisions.Tree");
             array.ToList().ForEach(num => {
-                _ = node.ContainsKey(num) ? node[num] : node[num] = new Hashtable();
+                TryAdd_HashTable(num, new Hashtable(), node)
+                
+                //_ = node.ContainsKey(num) ? node[num] : node[num] = new Hashtable();
                 // if (!node.ContainsKey(num))
                 // {  проверку вынести в отдельное место, как варик доопределить приватный метод, аналог tryadd, который всегда будет возвращать не null
                 //     node.Add(num, new Hashtable());
@@ -24,5 +26,13 @@ public class BuildCollisionTreeCommand: ICommand
                 node = (Hashtable)node[num];
             });
         });
+    }
+
+    private void TryAdd_HashTable(object key, object value, Hashtable hashtable)
+    {
+        if (!hashtable.ContainsKey(key))
+        {
+            hashtable.Add(key, new Hashtable());
+        }
     }
 }
