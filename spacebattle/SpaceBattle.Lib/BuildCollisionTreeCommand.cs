@@ -15,7 +15,7 @@ public class BuildCollisionTreeCommand: ICommand
         _arrays.ForEach(array => {
             var node = IoC.Resolve<Hashtable>("Game.Collisions.Tree");
             array.ToList().ForEach(num => {
-                TryAdd_HashTable(num, new Hashtable(), node)
+                //TryAdd_HashTable(num, new Hashtable(), node);
                 
                 //_ = node.ContainsKey(num) ? node[num] : node[num] = new Hashtable();
                 // if (!node.ContainsKey(num))
@@ -23,16 +23,19 @@ public class BuildCollisionTreeCommand: ICommand
                 //     node.Add(num, new Hashtable());
                 // }
 
-                node = (Hashtable)node[num];
+                //node = (Hashtable)node[num];
+                node = TryAdd_AndGetSubTree_HashTable(num, new Hashtable(), node);
             });
         });
     }
 
-    private void TryAdd_HashTable(object key, object value, Hashtable hashtable)
+    private static Hashtable TryAdd_AndGetSubTree_HashTable(object key, object value, Hashtable hashtable)
     {
-        if (!hashtable.ContainsKey(key))
+        if (hashtable.ContainsKey(key))
         {
-            hashtable.Add(key, new Hashtable());
+            hashtable.Add(key, value);
         }
+        
+        return (Hashtable)hashtable[key]!;
     }
 }
