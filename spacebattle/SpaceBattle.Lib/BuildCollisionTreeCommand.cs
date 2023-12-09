@@ -17,6 +17,7 @@ public class BuildCollisionTreeCommand: ICommand
             var node = IoC.Resolve<Dictionary<int, object>>("Game.Collisions.Tree");
             array.ToList().ForEach(num => {
                 node.TryAdd(num, new Dictionary<int, object>());
+                node = (Dictionary<int, object>)node[num];
                 
                 //_ = node.ContainsKey(num) ? node[num] : node[num] = new Hashtable();
                 // if (!node.ContainsKey(num))
