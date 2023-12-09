@@ -4,9 +4,10 @@ using Hwdtech.Ioc;
 
 public class BuildTreeTests
 {
-    static BuildTreeTests()
+    public BuildTreeTests()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
+        IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
         var tree = new D();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Collisions.Tree", (object[] args) => {
