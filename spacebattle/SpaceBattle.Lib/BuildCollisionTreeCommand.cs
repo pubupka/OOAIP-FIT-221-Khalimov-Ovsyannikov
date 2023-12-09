@@ -3,16 +3,18 @@ using Hwdtech;
 
 public class BuildCollisionTreeCommand: ICommand
 {
-    private readonly List<int[]> _arrays;
+    private readonly IArraysFromFileReader _reader;
 
-    public BuildCollisionTreeCommand(List<int[]> arrays)
+    public BuildCollisionTreeCommand(IArraysFromFileReader reader)
     {
-        _arrays = arrays;
+        _reader = reader;
     }
 
     public void Execute()
     {
-        _arrays.ForEach(array => {
+        var arrays = _reader.ReadArrays();
+
+        arrays.ForEach(array => {
             var node = IoC.Resolve<Hashtable>("Game.Collisions.Tree");
             array.ToList().ForEach(num => {
                 //TryAdd_HashTable(num, new Hashtable(), node);
