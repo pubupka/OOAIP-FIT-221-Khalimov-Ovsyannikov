@@ -1,4 +1,3 @@
-using System.Collections;
 using Hwdtech;
 
 public class BuildCollisionTreeCommand: ICommand
@@ -15,9 +14,9 @@ public class BuildCollisionTreeCommand: ICommand
         var arrays = _reader.ReadArrays();
 
         arrays.ForEach(array => {
-            var node = IoC.Resolve<Hashtable>("Game.Collisions.Tree");
+            var node = IoC.Resolve<Dictionary<int, object>>("Game.Collisions.Tree");
             array.ToList().ForEach(num => {
-                //TryAdd_HashTable(num, new Hashtable(), node);
+                node.TryAdd(num, new Dictionary<int, object>());
                 
                 //_ = node.ContainsKey(num) ? node[num] : node[num] = new Hashtable();
                 // if (!node.ContainsKey(num))
@@ -26,18 +25,20 @@ public class BuildCollisionTreeCommand: ICommand
                 // }
 
                 //node = (Hashtable)node[num];
-                node = TryAdd_AndGetSubTree_HashTable(num, new Hashtable(), node);
+
+
+                // //node = TryAdd_AndGetSubTree_HashTable(num, new Hashtable(), node);
             });
         });
     }
 
-    private static Hashtable TryAdd_AndGetSubTree_HashTable(object key, object value, Hashtable hashtable)
-    {
-        if (hashtable.ContainsKey(key))
-        {
-            hashtable.Add(key, value);
-        }
+    // private static Hashtable TryAdd_AndGetSubTree_HashTable(object key, object value, Hashtable hashtable)
+    // {
+    //     if (hashtable.ContainsKey(key))
+    //     {
+    //         hashtable.Add(key, value);
+    //     }
         
-        return (Hashtable)hashtable[key]!;
-    }
+    //     return (Hashtable)hashtable[key]!;
+    // }
 }

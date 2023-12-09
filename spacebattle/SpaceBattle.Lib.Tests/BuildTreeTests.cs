@@ -1,4 +1,4 @@
-using System.Collections;
+using D = System.Collections.Generic.Dictionary<int, object>;
 using Hwdtech;
 using Hwdtech.Ioc;
 
@@ -8,8 +8,8 @@ public class BuildTreeTests
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
 
-        var tree = new Hashtable();
-        IoC.Resolve<ICommand>("IoC.Register", "Game.Collisions.Tree", () => {
+        var tree = new D();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Collisions.Tree", (object[] args) => {
             return tree;
         }).Execute();
     }
@@ -18,7 +18,7 @@ public class BuildTreeTests
     public void BuildTree_Positive()
     {
         var reader = new Mock<IArraysFromFileReader>();
-        var path = "./CollisionVectors.txt";
+        var path = "../../../CollisionVectors.txt";
         var arrays = File.ReadAllLines(path).Select(
             line => line.Split(" ").Select(num => int.Parse(num)).ToArray()
         ).ToList();
@@ -40,11 +40,17 @@ public class BuildTreeTests
         var cmd = new BuildCollisionTreeCommand(reader.Object);
         cmd.Execute();
 
-        var tree = IoC.Resolve<Hashtable>("Game.Collisions.Tree");
+        var tree = IoC.Resolve<D>("Game.Collisions.Tree");
 
         var real_layer_1 = tree.Keys;
-        var real_layer_2 = ((Hashtable)tree[1]!).Keys;
-        
+        var real_layer_2 = ((D)tree[1]).Keys.Union(((D)tree[6]).Keys);
+        var real_layer_3 = ((D)((D)tree[1])[2]).Keys.Union(((D)((D)tree[6])[7]).Keys);
+        var real_layer_4 = ((D)((D)((D)tree[1])[2])[3]).Keys.Union(((D)((D)((D)tree[6])[7])[8]).Keys);
+
+        Assert.True(expected_layer_1.SequenceEqual(real_layer_1));
+        Assert.True(expected_layer_2.SequenceEqual(real_layer_2));
+        Assert.True(expected_layer_3.SequenceEqual(real_layer_3));
+        Assert.True(expected_layer_4.SequenceEqual(real_layer_4));
 
         // Добавить 4 слоя ключей, убедиться что на каждом слое присутствуют нужные ключи
     }
