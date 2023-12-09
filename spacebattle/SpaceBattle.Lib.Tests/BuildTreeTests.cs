@@ -4,7 +4,7 @@ using Hwdtech.Ioc;
 
 public class BuildTreeTests
 {
-    public BuildTreeTests()
+    static BuildTreeTests()
     {
         new InitScopeBasedIoCImplementationCommand().Execute();
 
@@ -15,7 +15,7 @@ public class BuildTreeTests
     }
 
     [Fact]
-    public void BuildTree_Positive()
+    public void BuildCollisionTreeCommand_Positive()
     {
         var reader = new Mock<IArraysFromFileReader>();
         var path = "../../../CollisionVectors.txt";
@@ -53,5 +53,16 @@ public class BuildTreeTests
         Assert.True(expected_layer_4.SequenceEqual(real_layer_4));
 
         // Добавить 4 слоя ключей, убедиться что на каждом слое присутствуют нужные ключи
+    }
+
+    [Fact]
+    public void BuildCollisionTreeCommand_CantReadCollisionFile()
+    {
+        var reader = new Mock<IArraysFromFileReader>();
+        reader.Setup(r => r.ReadArrays()).Throws(new NotImplementedException());
+
+        var cmd = new BuildCollisionTreeCommand(reader.Object);
+
+        Assert.Throws<NotImplementedException>(cmd.Execute);
     }
 }

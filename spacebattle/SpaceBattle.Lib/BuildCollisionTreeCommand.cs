@@ -27,7 +27,6 @@ public class BuildCollisionTreeCommand: ICommand
 
                 //node = (Hashtable)node[num];
 
-
                 // //node = TryAdd_AndGetSubTree_HashTable(num, new Hashtable(), node);
             });
         });
