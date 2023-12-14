@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 public class MacroCommandTests
@@ -8,7 +8,8 @@ public class MacroCommandTests
         new InitScopeBasedIoCImplementationCommand().Execute();
         IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
 
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.MacroCommands.MoveWithCheckFuel", (object[] args) => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.MacroCommands.MoveWithCheckFuel", (object[] args) =>
+        {
             return new string[] { "Game.Commands.Move", "Game.Commands.CheckFuel" };
         }).Execute();
     }
@@ -17,14 +18,16 @@ public class MacroCommandTests
     public void InitializeMacroCommand_Positive()
     {
         var moveCommand = new Mock<ICommand>();
-        moveCommand.Setup(mc => mc.Execute()).Callback(() => {}).Verifiable();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Move", (object[] args) => {
+        moveCommand.Setup(mc => mc.Execute()).Callback(() => { }).Verifiable();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Move", (object[] args) =>
+        {
             return moveCommand.Object;
         }).Execute();
 
         var checkFuelCommand = new Mock<ICommand>();
-        checkFuelCommand.Setup(cfc => cfc.Execute()).Callback(() => {}).Verifiable();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.CheckFuel", (object[] args) => {
+        checkFuelCommand.Setup(cfc => cfc.Execute()).Callback(() => { }).Verifiable();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.CheckFuel", (object[] args) =>
+        {
             return checkFuelCommand.Object;
         }).Execute();
 
@@ -35,21 +38,20 @@ public class MacroCommandTests
         checkFuelCommand.Verify(cfc => cfc.Execute(), Times.Once());
     }
 
-    // Тест 2: Одна или несколько команд выкидывают исключение при выполнении
-    // Тест 3: В макрокоманду передаётся имя несуществующей зависимости
-
     [Fact]
     public void OneOfAtomaricCommandsThrowsException()
     {
         var moveCommand = new Mock<ICommand>();
         moveCommand.Setup(mc => mc.Execute()).Throws(new NotImplementedException());
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Move", (object[] args) => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.Move", (object[] args) =>
+        {
             return moveCommand.Object;
         }).Execute();
 
         var checkFuelCommand = new Mock<ICommand>();
-        checkFuelCommand.Setup(cfc => cfc.Execute()).Callback(() => {});
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.CheckFuel", (object[] args) => {
+        checkFuelCommand.Setup(cfc => cfc.Execute()).Callback(() => { });
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.CheckFuel", (object[] args) =>
+        {
             return checkFuelCommand.Object;
         }).Execute();
 

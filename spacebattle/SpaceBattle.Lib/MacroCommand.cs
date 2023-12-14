@@ -1,6 +1,6 @@
-using Hwdtech;
+﻿using Hwdtech;
 
-public class MacroCommand: ICommand
+public class MacroCommand : ICommand
 {
     public List<ICommand> _cmds = new();
 
