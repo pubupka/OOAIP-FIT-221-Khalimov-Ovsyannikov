@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib.Tests
@@ -25,14 +21,14 @@ namespace SpaceBattle.Lib.Tests
             var repeatCommand = new Mock<ICommand>();
             repeatCommand.Setup(m => m.Execute());
 
-            string name = "Movement";
+            var name = "Movement";
             var mockUObject = new Mock<IUObject>();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command." + name, (object[] args) => mockCommand.Object).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Macro", (object[] args) => mockCommand.Object).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Repeat", (object[] args) => repeatCommand.Object).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Inject", (object[] args) => mockCommand.Object).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Operation." + name,(object[] args) => {return new LongOperationStrategy(name,(IUObject)args[0]).Invoke();}).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Operation." + name, (object[] args) => { return new LongOperationStrategy(name, (IUObject)args[0]).Invoke(); }).Execute();
 
             IoC.Resolve<ICommand>("Game.Operation." + name, mockUObject.Object).Execute();
             mockCommand.Verify();
@@ -43,21 +39,21 @@ namespace SpaceBattle.Lib.Tests
         {
             var mockCommand = new Mock<ICommand>();
             mockCommand.Setup(m => m.Execute());
-            
+
             var repeatCommand = new Mock<ICommand>();
             repeatCommand.Setup(m => m.Execute());
 
             var unactiveMockCommand = new Mock<ICommand>();
             unactiveMockCommand.Setup(u => u.Execute()).Verifiable();
 
-            string name = "Movement";
+            var name = "Movement";
             var mockUObject = new Mock<IUObject>();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command." + name, (object[] args) => mockCommand.Object).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Macro", (object[] args) => mockCommand.Object).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Repeat", (object[] args) => repeatCommand.Object).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Inject", (object[] args) => mockCommand.Object).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Operation." + name,(object[] args) => {return new LongOperationStrategy(name,(IUObject)args[0]).Invoke();}).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Operation." + name, (object[] args) => { return new LongOperationStrategy(name, (IUObject)args[0]).Invoke(); }).Execute();
 
             IoC.Resolve<ICommand>("Game.Operation." + name, mockUObject.Object).Execute();
             unactiveMockCommand.Verify(x => x.Execute(), Times.Never);
