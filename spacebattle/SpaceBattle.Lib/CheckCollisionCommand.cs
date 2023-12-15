@@ -22,7 +22,7 @@ namespace SpaceBattle.Lib
             var variations = IoC.Resolve<List<int>>("Game.UObject.FindVariations", positionFirst, positionSecond, velocityFirst, velocitySecond);
 
             var collisionTree = IoC.Resolve<IDictionary<int, object>>("Game.Command.BuildCollisionTree");
-            
+
             variations.ForEach(variation => collisionTree = (IDictionary<int, object>)collisionTree[variation]);
 
             IoC.Resolve<ICommand>("Game.Event.Collision", _objFirst, _objSecond).Execute();
