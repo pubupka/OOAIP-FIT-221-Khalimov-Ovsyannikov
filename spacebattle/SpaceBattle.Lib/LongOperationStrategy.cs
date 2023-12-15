@@ -16,8 +16,7 @@ namespace SpaceBattle.Lib
         {
             var cmd = IoC.Resolve<ICommand>("Game.Command." + _name, _target);
 
-            var injectCmd = IoC.Resolve<InjectCommand>("Game.Command.Inject", cmd);
-            var repeatCmd = IoC.Resolve<ICommand>("Game.Command.Repeat", injectCmd);
+            var repeatCmd = IoC.Resolve<ICommand>("Game.Command.StartCommand", cmd);
 
             return repeatCmd;
         }
