@@ -25,12 +25,13 @@ public class StartMoveCommand_Tests
         ).Execute();
 
         var LongMoveCommand = new Mock<ICommand>().Object;
+        var injectCommand = new InjectCommand(LongMoveCommand);
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
-            "Game.Commands.LongMove",
+            "Game.Commands.Inject.LongMove",
             (object[] args) =>
             {
-                return LongMoveCommand;
+                return injectCommand;
             }
         ).Execute();
     }
@@ -66,7 +67,7 @@ public class StartMoveCommand_Tests
         startMoveCommand.Execute();
 
         Assert.Contains("id", orderDict.Keys);
-        Assert.Contains("Game.Commands.LongMove", orderDict.Keys);
+        Assert.Contains("Game.Commands.Inject.LongMove", orderDict.Keys);
         Assert.NotEmpty(realQueue);
     }
 
