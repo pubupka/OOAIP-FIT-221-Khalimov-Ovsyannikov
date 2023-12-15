@@ -31,9 +31,9 @@ public class MacroCommandTests
             return checkFuelCommand.Object;
         }).Execute();
 
-        var cmds = new ArrayOfCmdsGetter("Game.MacroCommands.MoveWithCheckFuel").GetArrays();
+        var cmds = new CommandsGetter("Game.MacroCommands.MoveWithCheckFuel").GetCommands();
 
-        var macroCommand = new MacroCommand("Game.MacroCommands.MoveWithCheckFuel");
+        var macroCommand = new MacroCommand(cmds);
         macroCommand.Execute();
 
         moveCommand.Verify(mc => mc.Execute(), Times.Once());
@@ -57,7 +57,8 @@ public class MacroCommandTests
             return checkFuelCommand.Object;
         }).Execute();
 
-        var macroCommand = new MacroCommand("Game.MacroCommands.MoveWithCheckFuel");
+        var cmds = new CommandsGetter("Game.MacroCommands.MoveWithCheckFuel").GetCommands();
+        var macroCommand = new MacroCommand(cmds);
 
         Assert.Throws<NotImplementedException>(macroCommand.Execute);
     }
