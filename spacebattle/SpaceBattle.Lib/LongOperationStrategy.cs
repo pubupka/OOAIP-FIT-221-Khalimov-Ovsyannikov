@@ -15,8 +15,10 @@ namespace SpaceBattle.Lib
         public object Invoke(params object[] args)
         {
             var cmd = IoC.Resolve<ICommand>("Game.Command." + _name, _target);
-
-            var repeatCmd = IoC.Resolve<ICommand>("Game.Command.StartCommand", cmd);
+            var listcmd = new List<ICommand>(){cmd};
+            var macroCmd = IoC.Resolve<ICommand>("Game.Command.Macro" , cmd);
+            
+            var repeatCmd = IoC.Resolve<ICommand>("Game.Command.StartCommand", macroCmd);
 
             return repeatCmd;
         }
