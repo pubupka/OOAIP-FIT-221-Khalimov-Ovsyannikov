@@ -1,20 +1,14 @@
-﻿using Hwdtech;
-
-public class MacroCommand : ICommand
+﻿public class MacroCommand : ICommand
 {
-    public List<ICommand> _cmds = new();
+    public ICommand[] _cmds;
 
-    public MacroCommand(string nameOfDependency_returnsAtomaricCmdNames)
+    public MacroCommand(ICommand[] cmds)
     {
-        var cmdNames = IoC.Resolve<string[]>(nameOfDependency_returnsAtomaricCmdNames);
-        cmdNames.ToList().ForEach(cmd_name =>
-        {
-            _cmds.Add(IoC.Resolve<ICommand>(cmd_name));
-        });
+        _cmds = cmds;
     }
 
     public void Execute()
     {
-        _cmds.ForEach(cmd => cmd.Execute());
+        _cmds.ToList().ForEach(cmd => cmd.Execute());
     }
 }

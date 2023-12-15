@@ -31,6 +31,8 @@ public class MacroCommandTests
             return checkFuelCommand.Object;
         }).Execute();
 
+        var cmds = new ArrayOfCmdsGetter("Game.MacroCommands.MoveWithCheckFuel").GetArrays();
+
         var macroCommand = new MacroCommand("Game.MacroCommands.MoveWithCheckFuel");
         macroCommand.Execute();
 
