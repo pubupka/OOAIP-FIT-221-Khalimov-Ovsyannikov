@@ -18,18 +18,20 @@ public class StartMoveCommand : ICommand
             property.Value
         ));
 
-        var cmd = (ICommand)IoC.Resolve<IInjectable>(
-            "Game.Commands.Inject.LongMove",
+        var longCmd = IoC.Resolve<ICommand>(
+            "Game.Commands.LongMove",
             _startable.Order
         );
+
+        var injectCmd = IoC.Resolve<IInjectable>("Game.Commands.Inject", longCmd);
 
         IoC.Resolve<object>(
             "Game.IUObject.SetProperty",
             _startable.Order,
             "Game.Commands.Inject.LongMove",
-            cmd
+            injectCmd
         );
 
-        IoC.Resolve<IQueue>("Game.Queue").Add(cmd);
+        IoC.Resolve<IQueue>("Game.Queue").Add((ICommand)injectCmd);
     }
 }

@@ -24,14 +24,22 @@ public class StartMoveCommand_Tests
             }
         ).Execute();
 
-        var LongMoveCommand = new Mock<ICommand>().Object;
-        var injectCommand = new InjectCommand(LongMoveCommand);
+        var longMoveCommand = new Mock<ICommand>().Object;
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
-            "Game.Commands.Inject.LongMove",
+            "Game.Commands.LongMove",
             (object[] args) =>
             {
-                return injectCommand;
+                return longMoveCommand;
+            }
+        ).Execute();
+
+        IoC.Resolve<Hwdtech.ICommand>(
+            "IoC.Register",
+            "Game.Commands.Inject",
+            (object[] args) =>
+            {
+                return new InjectCommand((ICommand)args[0]);
             }
         ).Execute();
     }
