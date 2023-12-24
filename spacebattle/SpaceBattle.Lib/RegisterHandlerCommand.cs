@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
-    public class RegisterHandlerCommand: ICommand
+    public class RegisterHandlerCommand : ICommand
     {
-        private IEnumerable<Type> _typesCollection;
-        private IHandler _handler;
+        private readonly IEnumerable<Type> _typesCollection;
+        private readonly IHandler _handler;
 
         public RegisterHandlerCommand(IEnumerable<Type> typesCollection, IHandler handler)
         {
@@ -19,17 +15,19 @@ namespace SpaceBattle.Lib
 
         public void Execute()
         {
-            string hashcode = "";
-            _typesCollection.ToList().ForEach(type => {
-                hashcode+=Convert.ToString(type.GetHashCode());
+            var hashcode = "";
+            _typesCollection.ToList().ForEach(type =>
+            {
+                hashcode += Convert.ToString(type.GetHashCode());
             });
 
             var tree = IoC.Resolve<IDictionary<string, IHandler>>("Game.ExceptionHandler.Tree");
 
-            if (tree.TryGetValue(hashcode, out IHandler? handler))
+            if (tree.TryGetValue(hashcode, out var handler))
             {
                 return;
             }
+
             tree.Add(hashcode, _handler);
         }
     }
