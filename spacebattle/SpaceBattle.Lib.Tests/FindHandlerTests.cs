@@ -37,4 +37,67 @@ public class FindHandlerCommandTests
 
         Assert.True(handled);
     }
+
+    [Fact]
+    public void AnyCommand_and_SpecificException_Positive()
+    {
+        var handled = false;
+        var handler = new Mock<IHandler>();
+        var defaulthandler = new Mock<IHandler>();
+        handler.Setup(h => h.Handle()).Callback(() => handled = true);
+        defaulthandler.Setup(h => h.Handle()).Callback(() => {});
+
+        var subtree = new Dictionary<Type, IHandler>() { { typeof(FileNotFoundException), handler.Object } };
+        var tree = new Dictionary<Type, object>() { 
+                { typeof(ICommand), subtree } 
+        };
+
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+
+        new HandlerFinder().Find(typeof(BuildCollisionTreeCommand), typeof(FileNotFoundException)).Handle();
+
+        Assert.True(handled);
+    }
+
+    [Fact]
+    public void ConcreteCommand_and_AnyException_Positive()
+    {
+        var handled = false;
+        var handler = new Mock<IHandler>();
+        var defaulthandler = new Mock<IHandler>();
+        handler.Setup(h => h.Handle()).Callback(() => handled = true);
+        defaulthandler.Setup(h => h.Handle()).Callback(() => {});
+
+        var subtree = new Dictionary<Type, IHandler>() { { typeof(Exception), handler.Object } };
+        var tree = new Dictionary<Type, object>() { 
+                { typeof(BuildCollisionTreeCommand), subtree } 
+        };
+
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+
+        new HandlerFinder().Find(typeof(BuildCollisionTreeCommand), typeof(FileNotFoundException)).Handle();
+
+        Assert.True(handled);
+    }
+
+    [Fact]
+    public void DefaultHandled_Negative()
+    {
+        var defauthandled = false;
+        var handler = new Mock<IHandler>();
+        var defaulthandler = new Mock<IHandler>();
+        handler.Setup(h => h.Handle()).Callback(() => {});
+        defaulthandler.Setup(h => h.Handle()).Callback(() => defauthandled = true);
+
+        var tree = new Dictionary<Type, object>();
+
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+
+        new HandlerFinder().Find(typeof(BuildCollisionTreeCommand), typeof(FileNotFoundException)).Handle();
+
+        Assert.True(defauthandled);
+    }
 }
