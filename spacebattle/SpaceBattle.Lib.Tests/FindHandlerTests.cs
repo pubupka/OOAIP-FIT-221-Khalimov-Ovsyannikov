@@ -1,5 +1,5 @@
+﻿using Hwdtech;
 using Hwdtech.Ioc;
-using Hwdtech;
 using SpaceBattle.Lib;
 
 public class FindHandlerCommandTests
@@ -23,16 +23,17 @@ public class FindHandlerCommandTests
         var handler = new Mock<IHandler>();
         var defaulthandler = new Mock<IHandler>();
         handler.Setup(h => h.Handle()).Callback(() => handled = true);
-        defaulthandler.Setup(h => h.Handle()).Callback(() => {});
+        defaulthandler.Setup(h => h.Handle()).Callback(() => { });
 
         var subtree = new Dictionary<Type, string>() { { typeof(FileNotFoundException), "Game.EmptyCommand_FileNotFound_Handler" } };
-        var tree = new Dictionary<Type, object>() { 
-                { typeof(EmptyCommand), subtree } 
+        var tree = new Dictionary<Type, object>() {
+                { typeof(EmptyCommand), subtree }
         };
 
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_FileNotFound_Handler", (object[] args) => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_FileNotFound_Handler", (object[] args) =>
+        {
             return handler.Object;
         }).Execute();
 
@@ -48,16 +49,17 @@ public class FindHandlerCommandTests
         var handler = new Mock<IHandler>();
         var defaulthandler = new Mock<IHandler>();
         handler.Setup(h => h.Handle()).Callback(() => handled = true);
-        defaulthandler.Setup(h => h.Handle()).Callback(() => {});
+        defaulthandler.Setup(h => h.Handle()).Callback(() => { });
 
         var subtree = new Dictionary<Type, string>() { { typeof(FileNotFoundException), "Game.AnyCommand_FileNotFound_Handler" } };
-        var tree = new Dictionary<Type, object>() { 
-                { typeof(ICommand), subtree } 
+        var tree = new Dictionary<Type, object>() {
+                { typeof(ICommand), subtree }
         };
 
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.AnyCommand_FileNotFound_Handler", (object[] args) => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.AnyCommand_FileNotFound_Handler", (object[] args) =>
+        {
             return handler.Object;
         }).Execute();
 
@@ -73,16 +75,17 @@ public class FindHandlerCommandTests
         var handler = new Mock<IHandler>();
         var defaulthandler = new Mock<IHandler>();
         handler.Setup(h => h.Handle()).Callback(() => handled = true);
-        defaulthandler.Setup(h => h.Handle()).Callback(() => {});
+        defaulthandler.Setup(h => h.Handle()).Callback(() => { });
 
         var subtree = new Dictionary<Type, string>() { { typeof(Exception), "Game.EmptyCommand_AnyException_Handler" } };
-        var tree = new Dictionary<Type, object>() { 
-                { typeof(EmptyCommand), subtree } 
+        var tree = new Dictionary<Type, object>() {
+                { typeof(EmptyCommand), subtree }
         };
 
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_AnyException_Handler", (object[] args) => {
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_AnyException_Handler", (object[] args) =>
+        {
             return handler.Object;
         }).Execute();
 
@@ -97,7 +100,7 @@ public class FindHandlerCommandTests
         var defauthandled = false;
         var handler = new Mock<IHandler>();
         var defaulthandler = new Mock<IHandler>();
-        handler.Setup(h => h.Handle()).Callback(() => {});
+        handler.Setup(h => h.Handle()).Callback(() => { });
         defaulthandler.Setup(h => h.Handle()).Callback(() => defauthandled = true);
 
         var tree = new Dictionary<Type, object>();

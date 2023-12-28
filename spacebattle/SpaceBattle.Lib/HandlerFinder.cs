@@ -1,5 +1,5 @@
+﻿using Hwdtech;
 using SpaceBattle.Lib;
-using Hwdtech;
 
 public class HandlerFinder
 {
@@ -18,7 +18,7 @@ public class HandlerFinder
         var subtree = (Dictionary<Type, string>)_handleTree.GetValueOrDefault(
             cmdType,
             _handleTree.GetValueOrDefault(
-                typeof(ICommand), 
+                typeof(ICommand),
                 new Dictionary<Type, string>() { { typeof(string), "Game.DefaultHandler" } }
             )
         );
