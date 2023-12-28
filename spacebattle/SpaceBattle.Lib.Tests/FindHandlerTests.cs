@@ -25,15 +25,18 @@ public class FindHandlerCommandTests
         handler.Setup(h => h.Handle()).Callback(() => handled = true);
         defaulthandler.Setup(h => h.Handle()).Callback(() => {});
 
-        var subtree = new Dictionary<Type, IHandler>() { { typeof(FileNotFoundException), handler.Object } };
+        var subtree = new Dictionary<Type, string>() { { typeof(FileNotFoundException), "Game.EmptyCommand_FileNotFound_Handler" } };
         var tree = new Dictionary<Type, object>() { 
-                { typeof(BuildCollisionTreeCommand), subtree } 
+                { typeof(EmptyCommand), subtree } 
         };
 
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_FileNotFound_Handler", (object[] args) => {
+            return handler.Object;
+        }).Execute();
 
-        new HandlerFinder().Find(typeof(BuildCollisionTreeCommand), typeof(FileNotFoundException)).Handle();
+        new HandlerFinder().Find(new EmptyCommand(), new FileNotFoundException()).Handle();
 
         Assert.True(handled);
     }
@@ -47,21 +50,24 @@ public class FindHandlerCommandTests
         handler.Setup(h => h.Handle()).Callback(() => handled = true);
         defaulthandler.Setup(h => h.Handle()).Callback(() => {});
 
-        var subtree = new Dictionary<Type, IHandler>() { { typeof(FileNotFoundException), handler.Object } };
+        var subtree = new Dictionary<Type, string>() { { typeof(FileNotFoundException), "Game.AnyCommand_FileNotFound_Handler" } };
         var tree = new Dictionary<Type, object>() { 
                 { typeof(ICommand), subtree } 
         };
 
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.AnyCommand_FileNotFound_Handler", (object[] args) => {
+            return handler.Object;
+        }).Execute();
 
-        new HandlerFinder().Find(typeof(BuildCollisionTreeCommand), typeof(FileNotFoundException)).Handle();
+        new HandlerFinder().Find(new EmptyCommand(), new FileNotFoundException()).Handle();
 
         Assert.True(handled);
     }
 
     [Fact]
-    public void ConcreteCommand_and_AnyException_Positive()
+    public void SpecificCommand_and_AnyException_Positive()
     {
         var handled = false;
         var handler = new Mock<IHandler>();
@@ -69,15 +75,18 @@ public class FindHandlerCommandTests
         handler.Setup(h => h.Handle()).Callback(() => handled = true);
         defaulthandler.Setup(h => h.Handle()).Callback(() => {});
 
-        var subtree = new Dictionary<Type, IHandler>() { { typeof(Exception), handler.Object } };
+        var subtree = new Dictionary<Type, string>() { { typeof(Exception), "Game.EmptyCommand_AnyException_Handler" } };
         var tree = new Dictionary<Type, object>() { 
-                { typeof(BuildCollisionTreeCommand), subtree } 
+                { typeof(EmptyCommand), subtree } 
         };
 
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_AnyException_Handler", (object[] args) => {
+            return handler.Object;
+        }).Execute();
 
-        new HandlerFinder().Find(typeof(BuildCollisionTreeCommand), typeof(FileNotFoundException)).Handle();
+        new HandlerFinder().Find(new EmptyCommand(), new Exception()).Handle();
 
         Assert.True(handled);
     }
@@ -96,7 +105,7 @@ public class FindHandlerCommandTests
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
 
-        new HandlerFinder().Find(typeof(BuildCollisionTreeCommand), typeof(FileNotFoundException)).Handle();
+        new HandlerFinder().Find(new EmptyCommand(), new FileNotFoundException()).Handle();
 
         Assert.True(defauthandled);
     }
