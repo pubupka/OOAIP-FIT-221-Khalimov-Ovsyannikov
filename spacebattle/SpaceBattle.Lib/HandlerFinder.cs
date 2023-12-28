@@ -5,21 +5,17 @@ public class HandlerFinder
 {
     private readonly Dictionary<Type, object> _handleTree;
     //private readonly Dictionary<Type, Dictionary<Type, IHandler>> _handleTree;
-    private readonly Type _cmdType;
-    private readonly Type _exType;
 
-    public HandlerFinder(Type cmdType, Type exType)
+    public HandlerFinder()
     {
         _handleTree = IoC.Resolve<Dictionary<Type, object>>("Game.GetHandleTree");
         //_handleTree = IoC.Resolve<Dictionary<Type, Dictionary<Type, IHandler>>>("Game.GetHandleTree");
-        _cmdType = cmdType;
-        _exType = exType;
     }
 
-    public IHandler Find()
+    public IHandler Find(Type cmdType, Type exType)
     {
         var subtree = (Dictionary<Type, IHandler>)_handleTree.GetValueOrDefault(
-            _cmdType,
+            cmdType,
             _handleTree.GetValueOrDefault(
                 typeof(ICommand), 
                 new Dictionary<Type, IHandler>() { { typeof(IHandler), IoC.Resolve<IHandler>("Game.DefaultHandler") } }
@@ -27,7 +23,7 @@ public class HandlerFinder
         );
 
         var handler = subtree.GetValueOrDefault(
-            _exType,
+            exType,
             subtree.GetValueOrDefault(
                 typeof(Exception),
                 subtree.GetValueOrDefault(
