@@ -30,8 +30,8 @@ public class FindHandlerCommandTests
                 { typeof(EmptyCommand), subtree }
         };
 
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+        new InitTreeCommand(tree).Execute();
+        new InitDefaultHandlerCommand(defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_FileNotFound_Handler", (object[] args) =>
         {
             return handler.Object;
@@ -56,8 +56,8 @@ public class FindHandlerCommandTests
                 { typeof(ICommand), subtree }
         };
 
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+        new InitTreeCommand(tree).Execute();
+        new InitDefaultHandlerCommand(defaulthandler.Object).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.AnyCommand_FileNotFound_Handler", (object[] args) =>
         {
             return handler.Object;
@@ -82,8 +82,9 @@ public class FindHandlerCommandTests
                 { typeof(EmptyCommand), subtree }
         };
 
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+        new InitTreeCommand(tree).Execute();
+        new InitDefaultHandlerCommand(defaulthandler.Object).Execute();
+        
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_AnyException_Handler", (object[] args) =>
         {
             return handler.Object;
@@ -103,10 +104,8 @@ public class FindHandlerCommandTests
         handler.Setup(h => h.Handle()).Callback(() => { });
         defaulthandler.Setup(h => h.Handle()).Callback(() => defauthandled = true);
 
-        var tree = new Dictionary<Type, object>();
-
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DefaultHandler", (object[] args) => defaulthandler.Object).Execute();
-        IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetHandleTree", (object[] args) => tree).Execute();
+        new InitTreeCommand(new Dictionary<Type, object>()).Execute();
+        new InitDefaultHandlerCommand(defaulthandler.Object).Execute();
 
         new HandlerFinder().Find(new EmptyCommand(), new FileNotFoundException()).Handle();
 
