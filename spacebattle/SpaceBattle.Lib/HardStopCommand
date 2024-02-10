@@ -1,0 +1,17 @@
+namespace SpaceBattle.Lib
+{
+    class HardStopCommand : ICommand
+    {
+        ServerThread _thread;
+
+        public HardStopCommand(ServerThread thread)
+        {
+            _thread = thread;
+        }
+
+        public void Execute()
+        {
+            _thread.Stop();
+        }
+    }
+}

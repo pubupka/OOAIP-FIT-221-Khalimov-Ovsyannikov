@@ -5,21 +5,21 @@ namespace SpaceBattle.Lib
 {
     class ServerThread 
     {
-        private Thread _t;
-        private BlockingCollection<ICommand> _q;
+        private Thread _thread;
+        private BlockingCollection<ICommand> _query;
         private bool stop = false;
         Action strategy;
 
-        public ServerThread(BlockingCollection<ICommand> q) 
+        public ServerThread(BlockingCollection<ICommand> query) 
         {
-            _q = q;
+            _query = query;
 
             strategy = () => {
-                var cmd = q.Take();
+                var cmd = query.Take();
                 try {
                     cmd.Execute();
                 } catch (Exception e) {
-                    IoC.Resolve<ICommand>("Exception.Handle", cmd, e).Execute();
+                    IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
                 }
             }
 
