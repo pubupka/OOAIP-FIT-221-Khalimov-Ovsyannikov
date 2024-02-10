@@ -1,8 +1,8 @@
 namespace SpaceBattle.Lib
 {
-    class HardStopCommand : ICommand
+    public class HardStopCommand : ICommand
     {
-        ServerThread _thread;
+        private readonly ServerThread _thread;
 
         public HardStopCommand(ServerThread thread)
         {

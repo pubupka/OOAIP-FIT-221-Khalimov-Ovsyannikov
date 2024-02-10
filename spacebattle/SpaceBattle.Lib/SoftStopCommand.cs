@@ -4,18 +4,18 @@ namespace SpaceBattle.Lib
 {
     public class SoftStopCommand : ICommand
     {
-        ServerThread _thread;
-        BlockingCollection<ICommand> _threadQuery;
+        private readonly ServerThread _thread;
+        private readonly BlockingCollection<ICommand> _threadQuery;
 
         public SoftStopCommand(ServerThread thread, BlockingCollection<ICommand> threadQuery)
         {
             _thread = thread;
-            _threadQuery = threadQuery
+            _threadQuery = threadQuery;
         }
 
         public void Execute()
         {
-            _threadQuery.Add(new HardStopCommand(_thread))
+            _threadQuery.Add(new HardStopCommand(_thread));
         }
     }
 }

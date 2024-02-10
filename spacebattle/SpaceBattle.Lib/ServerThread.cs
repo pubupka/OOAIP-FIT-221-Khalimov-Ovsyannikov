@@ -1,48 +1,52 @@
 using System.Collections.Concurrent;
-using IoC;
+using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
-    class ServerThread 
+    public class ServerThread 
     {
-        private Thread _thread;
-        private BlockingCollection<ICommand> _query;
-        private bool stop = false;
-        Action strategy;
+        private readonly Thread _thread;
+        private readonly BlockingCollection<ICommand> _query;
+        private bool _stop = false;
+        private Action _strategy;
 
         public ServerThread(BlockingCollection<ICommand> query) 
         {
             _query = query;
 
-            strategy = () => {
-                var cmd = query.Take();
-                try {
+            _strategy = () => {
+                var cmd = _query.Take();
+                try 
+                {
                     cmd.Execute();
-                } catch (Exception e) {
+                } 
+                catch (Exception e) 
+                {
                     IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
                 }
-            }
+            };
 
-            _t = new Thread(() => {
-                while(!stop) {
-                    strategy(); 
+            _thread = new Thread(() => {
+                while(!_stop) 
+                {
+                    _strategy(); 
                 }
             });
         }
 
         public void Start() 
         {
-            _t.Start();
+            _thread.Start();
         }
 
         internal void Stop() 
         {
-            stop = true;
+            _stop = true;
         }
 
         internal void ChangeStrategy(Action newStrategy) 
         {
-            strategy = newStrategy;
+            _strategy = newStrategy;
         }
     }
 }
