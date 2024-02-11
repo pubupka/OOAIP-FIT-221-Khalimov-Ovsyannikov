@@ -6,16 +6,18 @@ namespace SpaceBattle.Lib
     public class ServerThread 
     {
         private readonly Thread _thread;
-        private readonly BlockingCollection<ICommand> _query;
+        public BlockingCollection<ICommand> Query { get; }
         private bool _stop = false;
         private Action _strategy;
 
+        public int Id { get;}
+
         public ServerThread(BlockingCollection<ICommand> query) 
         {
-            _query = query;
+            Query = query;
 
             _strategy = () => {
-                var cmd = _query.Take();
+                var cmd = Query.Take();
                 try 
                 {
                     cmd.Execute();
