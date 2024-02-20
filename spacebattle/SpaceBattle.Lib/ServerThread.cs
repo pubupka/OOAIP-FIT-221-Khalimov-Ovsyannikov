@@ -5,27 +5,19 @@ namespace SpaceBattle.Lib
 {
     public class ServerThread 
     {
-        private readonly Thread _thread;
         public BlockingCollection<ICommand> Query { get; }
+        public int Id { get;}
+        private readonly Thread _thread;
         private bool _stop = false;
         private Action _strategy;
 
-        public int Id { get;}
-
-        public ServerThread(BlockingCollection<ICommand> query) 
+        public ServerThread(BlockingCollection<ICommand> query, int id) 
         {
             Query = query;
+            Id = id;
 
             _strategy = () => {
-                var cmd = Query.Take();
-                try 
-                {
-                    cmd.Execute();
-                } 
-                catch (Exception e) 
-                {
-                    IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
-                }
+                BaseStrategy();
             };
 
             _thread = new Thread(() => {
@@ -49,6 +41,19 @@ namespace SpaceBattle.Lib
         internal void ChangeStrategy(Action newStrategy) 
         {
             _strategy = newStrategy;
+        }
+
+        internal void BaseStrategy()
+        {
+            var cmd = Query.Take();
+            try 
+            {
+                cmd.Execute();
+            } 
+            catch (Exception e) 
+            {
+                IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
+            }
         }
     }
 }

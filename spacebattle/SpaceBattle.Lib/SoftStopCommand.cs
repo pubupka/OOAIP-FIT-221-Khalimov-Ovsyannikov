@@ -1,34 +1,31 @@
-using Hwdtech;
-
 namespace SpaceBattle.Lib
 {
     public class SoftStopCommand : ICommand
     {
         private readonly ServerThread _thread;
         private readonly int _threadId;
+        private readonly Action _actionAfterStop;
 
-        public SoftStopCommand(ServerThread thread, int threadId)
+        public SoftStopCommand(ServerThread thread, int threadId, Action actionAfterStop)
         {
             _thread = thread;
             _threadId = threadId;
+            _actionAfterStop = actionAfterStop;
         }
 
         public void Execute()
         {
             if (_thread.Id == _threadId)
                 _thread.ChangeStrategy(() => {
-                    var cmd = _thread.Query.Take();
-                    try 
-                    {
-                        cmd.Execute();
-                    } 
-                    catch (Exception e) 
-                    {
-                        IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
-                    }
-
                     if (_thread.Query.Count == 0)
+                    {
                         _thread.Stop();
+                        _actionAfterStop();
+                    }
+                    else
+                    {
+                        _thread.BaseStrategy();
+                    }
                 });
             else
                 throw new ThreadStateException();
