@@ -5,20 +5,18 @@ namespace SpaceBattle.Lib
 {
     public class ServerThread 
     {
-        public BlockingCollection<ICommand> Query { get; }
+        public BlockingCollection<ICommand> Queue { get; }
         public int Id { get;}
         private readonly Thread _thread;
         private bool _stop = false;
         private Action _strategy;
 
-        public ServerThread(BlockingCollection<ICommand> query, int id) 
+        public ServerThread(BlockingCollection<ICommand> queue, int id) 
         {
-            Query = query;
+            Queue = queue;
             Id = id;
 
-            _strategy = () => {
-                BaseStrategy();
-            };
+            _strategy = BaseStrategy;
 
             _thread = new Thread(() => {
                 while(!_stop) 
@@ -45,7 +43,7 @@ namespace SpaceBattle.Lib
 
         internal void BaseStrategy()
         {
-            var cmd = Query.Take();
+            var cmd = Queue.Take();
             try 
             {
                 cmd.Execute();

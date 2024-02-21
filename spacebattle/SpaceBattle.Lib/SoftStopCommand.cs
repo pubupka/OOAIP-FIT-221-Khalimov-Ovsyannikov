@@ -17,7 +17,7 @@ namespace SpaceBattle.Lib
         {
             if (_thread.Id == _threadId)
                 _thread.ChangeStrategy(() => {
-                    if (_thread.Query.Count == 0)
+                    if (_thread.Queue.Count == 0)
                     {
                         _thread.Stop();
                         _actionAfterStop();
