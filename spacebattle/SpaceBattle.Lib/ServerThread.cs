@@ -39,11 +39,11 @@ namespace SpaceBattle.Lib
             _queue.Add(cmd);
         }
 
-        public void SecureIdAddCommand(int id, ICommand cmd)
+        public void ActionWithIdCheck(int id, Action action)
         {
             if (id == _thread.ManagedThreadId)
             {
-                cmd.Execute();
+                action();
             }
             else
                 throw new ThreadStateException();
@@ -74,6 +74,18 @@ namespace SpaceBattle.Lib
             catch (Exception e) 
             {
                 IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
+            }
+        }
+
+        internal void SoftStopStrategy()
+        {
+            if (IsEmpty())
+            {
+                Stop();
+            }
+            else
+            {
+                BaseStrategy();
             }
         }
     }

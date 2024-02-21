@@ -3,29 +3,20 @@ namespace SpaceBattle.Lib
     public class SoftStopCommand : ICommand
     {
         private readonly ServerThread _thread;
-        private readonly int _threadId;
+        private readonly int _id;
 
-        public SoftStopCommand(ServerThread thread, int threadId)
+        public SoftStopCommand(ServerThread thread, int id)
         {
             _thread = thread;
-            _threadId = threadId;
+            _id = id;
         }
 
         public void Execute()
         {
-            if (_thread.GetId() == _threadId)
-                _thread.ChangeStrategy(() => {
-                    if (_thread.IsEmpty())
-                    {
-                        _thread.Stop();
-                    }
-                    else
-                    {
-                        _thread.BaseStrategy();
-                    }
-                });
-            else
-                throw new ThreadStateException();
+            _thread.ActionWithIdCheck(
+                _id,
+                () => _thread.ChangeStrategy(_thread.SoftStopStrategy)
+            );
         }
     }
 }

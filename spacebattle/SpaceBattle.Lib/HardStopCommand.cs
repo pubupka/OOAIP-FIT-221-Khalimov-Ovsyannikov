@@ -3,25 +3,17 @@ namespace SpaceBattle.Lib
     public class HardStopCommand : ICommand
     {
         private readonly ServerThread _thread;
-        private readonly int _threadId;
+        private readonly int _id;
 
-        public HardStopCommand(ServerThread thread, int threadId)
+        public HardStopCommand(ServerThread thread, int id)
         {
             _thread = thread;
-            _threadId = threadId;
+            _id = id;
         }
 
         public void Execute()
         {
-            // _thread.Stop();
-            // _actionAfterStop();
-
-            if (_thread.GetId() == _threadId)
-            {
-                _thread.Stop();
-            }
-            else
-                throw new ThreadStateException();
+            _thread.ActionWithIdCheck(_id, _thread.Stop);
         }
     }
 }
