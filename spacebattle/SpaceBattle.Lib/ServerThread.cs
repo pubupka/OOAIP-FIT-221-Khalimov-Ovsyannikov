@@ -5,16 +5,14 @@ namespace SpaceBattle.Lib
 {
     public class ServerThread 
     {
-        public BlockingCollection<ICommand> Queue { get; }
-        public int Id { get;}
+        private readonly BlockingCollection<ICommand> _queue;
         private readonly Thread _thread;
         private bool _stop = false;
         private Action _strategy;
 
-        public ServerThread(BlockingCollection<ICommand> queue, int id) 
+        public ServerThread(BlockingCollection<ICommand> queue) 
         {
-            Queue = queue;
-            Id = id;
+            _queue = queue;
 
             _strategy = BaseStrategy;
 
@@ -31,19 +29,44 @@ namespace SpaceBattle.Lib
             _thread.Start();
         }
 
+        public void ChangeStrategy(Action newStrategy) 
+        {
+            _strategy = newStrategy;
+        }
+
+        public void AddCommand(ICommand cmd)
+        {
+            _queue.Add(cmd);
+        }
+
+        public void SecureIdAddCommand(int id, ICommand cmd)
+        {
+            if (id == _thread.ManagedThreadId)
+            {
+                cmd.Execute();
+            }
+            else
+                throw new ThreadStateException();
+        }
+
+        public int GetId()
+        {
+            return _thread.ManagedThreadId;
+        }
+
+        public bool IsEmpty()
+        {
+            return _queue.Count == 0;
+        }
+
         internal void Stop() 
         {
             _stop = true;
         }
 
-        internal void ChangeStrategy(Action newStrategy) 
-        {
-            _strategy = newStrategy;
-        }
-
         internal void BaseStrategy()
         {
-            var cmd = Queue.Take();
+            var cmd = _queue.Take();
             try 
             {
                 cmd.Execute();

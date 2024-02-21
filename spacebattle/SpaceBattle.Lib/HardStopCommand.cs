@@ -4,21 +4,21 @@ namespace SpaceBattle.Lib
     {
         private readonly ServerThread _thread;
         private readonly int _threadId;
-        private readonly Action _actionAfterStop;
 
-        public HardStopCommand(ServerThread thread, int threadId, Action actionAfterStop)
+        public HardStopCommand(ServerThread thread, int threadId)
         {
             _thread = thread;
             _threadId = threadId;
-            _actionAfterStop = actionAfterStop;
         }
 
         public void Execute()
         {
-            if (_thread.Id == _threadId)
+            // _thread.Stop();
+            // _actionAfterStop();
+
+            if (_thread.GetId() == _threadId)
             {
                 _thread.Stop();
-                _actionAfterStop();
             }
             else
                 throw new ThreadStateException();

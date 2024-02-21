@@ -12,8 +12,7 @@ namespace SpaceBattle.Lib
                 "Create And Start Thread",
                 (object threadId) => {
                     return new ServerThread(
-                        new BlockingCollection<ICommand>(),
-                        (int)threadId
+                        new BlockingCollection<ICommand>()
                     );
                 }
             ).Execute();
@@ -23,7 +22,7 @@ namespace SpaceBattle.Lib
                 "Send Command",
                 (object id, object cmd) => {
                     var thread = IoC.Resolve<ServerThread>("GetThreadById", (int)id);
-                    thread.Queue.Add((ICommand)cmd);
+                    thread.AddCommand((ICommand)cmd);
                 }
             ).Execute();
 
@@ -32,7 +31,7 @@ namespace SpaceBattle.Lib
                 "Hard Stop The Thread",
                 (object id, object actionAfterStop) => {
                     var thread = IoC.Resolve<ServerThread>("GetThreadById", (int)id);
-                    var hardStopCommand = new HardStopCommand(thread, (int)id, (Action)actionAfterStop);
+                    var hardStopCommand = new HardStopCommand(thread, (int)id);
 
                     var commandWrapper = new CommandWrapper(hardStopCommand, (Action)actionAfterStop);
                     
@@ -45,7 +44,7 @@ namespace SpaceBattle.Lib
                 "Soft Stop The Thread",
                 (object id, object actionAfterStop) => {
                     var thread = IoC.Resolve<ServerThread>("GetThreadById", (int)id);
-                    var softStopCommand = new SoftStopCommand(thread, (int)id, (Action)actionAfterStop);
+                    var softStopCommand = new SoftStopCommand(thread, (int)id);
 
                     var commandWrapper = new CommandWrapper(softStopCommand, (Action)actionAfterStop);
                     
