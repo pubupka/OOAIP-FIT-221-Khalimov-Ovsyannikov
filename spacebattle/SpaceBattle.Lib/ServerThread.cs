@@ -59,6 +59,11 @@ namespace SpaceBattle.Lib
             return _queue.Count == 0;
         }
 
+        public bool IsRunning()
+        {
+            return _thread.IsAlive;
+        }
+
         internal void Stop() 
         {
             _stop = true;
