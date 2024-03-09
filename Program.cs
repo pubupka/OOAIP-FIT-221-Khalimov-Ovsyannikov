@@ -11,9 +11,9 @@ namespace SpaceBattle.Lib
         static void Main(string[] args)
         {
             Console.WriteLine("Введите кол-во потоков");
-            var listOfThreads = IoC.Resolve<List<ICommand>>("Server.Start.AllThreads", int.Parse(Console.ReadLine()));
+            IoC.Resolve<ICommand>("Server.Start.AllThreads", Console.ReadLine()).Execute();
             Console.ReadKey();
-            IoC.Resolve<ICommand>("Server.Stop.AllThreads", dictOfThreads);
+            IoC.Resolve<ICommand>("Server.Stop.AllThreads").Execute();
         }
     }
 }

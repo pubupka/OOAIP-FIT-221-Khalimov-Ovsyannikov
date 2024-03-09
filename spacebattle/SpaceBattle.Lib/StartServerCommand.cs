@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hwdtech;
+using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib
 {
-    public class StartServerStrategy: IStrategy
+    public class StartServerCommand:ICommand
     { 
-        public object Invoke(int numberOfThreads)
+        private string _threadId;
+        public StartServerCommand(string threadId)
         {
-            List<ICommand> list = new List<ICommand>();
-            for(i=0;i< numberOfThreads;i++)
-            {
-                list.Add(IoC.Resolve<ICommand>("Server.Thread.Start"));
-            }
-            return list;
+            _threadId = threadId;
+        }
+        public void Execute()
+        {
+            var _thread = IoC.Resolve<ICommand>("Server.Thread");
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Threads.Collection."+_threadId, (object[] args)=>{
+                ICommand thread = (ICommand) args[0];
+                return thread;
+            }).Execute();
+            _thread.Execute();
         }
     }
 }

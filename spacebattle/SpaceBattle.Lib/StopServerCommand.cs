@@ -8,16 +8,16 @@ namespace SpaceBattle.Lib
 {
     public class StopServerCommand:ICommand
     {
-        private ICommand _threadToStop;
+        private string _threadId;
 
-        public StopServerCommand(ICommand threadToStop)
+        public StopServerCommand(string threadId)
         {
-            _threadToStop = threadToStop;
+            _threadId = threadId;
         }
 
         public void Execute()
         {
-            IoC.Resolve<ICommand>("Server.Thread.Stop", _threadToStop).Execute();
+            IoC.Resolve<ICommand>("IoC.Server.Thread.SoftStop."+_threadId).Execute();
         }
     }
 }
