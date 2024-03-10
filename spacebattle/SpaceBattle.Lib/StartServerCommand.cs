@@ -18,7 +18,7 @@ namespace SpaceBattle.Lib
         {
             var _thread = IoC.Resolve<ICommand>("Server.Thread");
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Threads.Collection."+_threadId, (object[] args)=>{
-                ICommand thread = (ICommand) args[0];
+                ICommand thread = _thread;
                 return thread;
             }).Execute();
             _thread.Execute();

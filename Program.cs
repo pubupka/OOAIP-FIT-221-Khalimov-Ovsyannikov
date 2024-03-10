@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Hwdtech;
+using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib
 {
     public class Program
     {
-        static void Main(string[] args)
+        public void Main(string[] args)
         {
-            Console.WriteLine("Введите кол-во потоков");
-            IoC.Resolve<ICommand>("Server.Start.AllThreads", Console.ReadLine()).Execute();
+            var count = int.Parse(args[0]);
+            IoC.Resolve<ICommand>("Server.Start.AllThreads", count).Execute();
             Console.ReadKey();
-            IoC.Resolve<ICommand>("Server.Stop.AllThreads").Execute();
+            IoC.Resolve<ICommand>("Server.Stop.AllThreads", count).Execute();
         }
     }
 }

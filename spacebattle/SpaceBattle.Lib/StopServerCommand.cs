@@ -17,7 +17,7 @@ namespace SpaceBattle.Lib
 
         public void Execute()
         {
-            IoC.Resolve<ICommand>("IoC.Server.Thread.SoftStop."+_threadId).Execute();
+            IoC.Resolve<ICommand>("Server.Thread.SoftStop", _threadId).Execute();
         }
     }
 }
