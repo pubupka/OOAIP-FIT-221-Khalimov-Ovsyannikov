@@ -4,8 +4,8 @@ namespace SpaceBattle.Lib
 {
     public class StartServerCommand : ICommand
     {
-        private readonly string _threadId;
-        public StartServerCommand(string threadId)
+        private readonly string? _threadId;
+        public StartServerCommand(string? threadId)
         {
             _threadId = threadId;
         }

@@ -70,5 +70,19 @@ namespace SpaceBattle.Lib.Tests
             mockStartCommand.Verify(x => x.Execute(), Times.Exactly(5));
             mockStopCommand.Verify(x => x.Execute(), Times.Once());
         }
+
+        [Fact]
+        public void StopUnexistingServer()
+        {
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.SoftStop",
+                (object[] args) =>
+                    {
+                        return new EmptyCommand();
+                    }).Execute();
+
+            var cmd = IoC.Resolve<ICommand>("Server.Thread.Stop", "");
+
+            Assert.Throws<Exception>(cmd.Execute);
+        }
     }
 }
