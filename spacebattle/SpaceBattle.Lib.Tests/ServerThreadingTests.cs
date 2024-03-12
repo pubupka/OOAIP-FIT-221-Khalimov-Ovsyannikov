@@ -1,13 +1,13 @@
-using System.Collections.Concurrent;
 using Hwdtech.Ioc;
 using Hwdtech;
+using System.Collections.Concurrent;
 
 namespace SpaceBattle.Lib.Tests
 {
     public class ServerThreadingTests
     {
         /*
-        
+
         1) ХардСтоп нормальный
         2) Хардстоп исключение
         3) Софтстоп нормальный
@@ -22,22 +22,61 @@ namespace SpaceBattle.Lib.Tests
         }
 
         [Fact]
-        public void HardStopTest()
+        public void HardStop_Positive()
         {
-            var serverThread = IoC.Resolve<ServerThread>("Create And Start Thread");
+            var mre = new ManualResetEvent(false);
+            var q = new BlockingCollection<ICommand>();
+            var serverThread = new ServerThread(q);
             var id = serverThread.GetId();
-            var isDone = false;
-            void ActionAfterStop() 
-            {
-                isDone = true;
-            }
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
-            var hardStopCommandWrapper = IoC.Resolve<ICommand>("Hard Stop The Thread", id, () => { ActionAfterStop();} );
-            
-            hardStopCommandWrapper.Execute();
 
-            Assert.True(isDone);
+            var cmd = new Mock<ICommand>();
+            cmd.Setup(c => c.Execute()).Verifiable();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
+            var hardStopCommandWrapper = IoC.Resolve<ICommand>("Hard Stop The Thread", id, () => { mre.Set();} );
+            
+            serverThread.AddCommand(cmd.Object);
+            serverThread.AddCommand(hardStopCommandWrapper);
+            serverThread.AddCommand(cmd.Object);
+
+            serverThread.Start();
+            mre.WaitOne();
+
+            Assert.Single(q);
             Assert.True(!serverThread.IsRunning());
+            cmd.Verify(c => c.Execute(), Times.Once);
+        }
+
+        [Fact]
+        public void HardStop_ThrowsException()
+        {
+            // var serverThread = IoC.Resolve<ServerThread>("Create And Start Thread");
+            // var id = 123;  // какой-попало айди
+            
+            // IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
+            // var hardStopCommandWrapper = IoC.Resolve<ICommand>("Hard Stop The Thread", id, () => { } );
+
+            // Assert.Throws<ThreadStateException>(hardStopCommandWrapper.Execute);
+        }
+
+        [Fact]
+        public void SoftStop_Positive()
+        {
+            // var serverThread = IoC.Resolve<ServerThread>("Create And Start Thread");
+            // var id = serverThread.GetId();
+            // var isDone = false;
+            // void ActionAfterStop() 
+            // {
+            //     isDone = true;
+            // }
+
+            // IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
+            // var hardStopCommandWrapper = IoC.Resolve<ICommand>("Hard Stop The Thread", id, () => { ActionAfterStop();} );
+            
+            // hardStopCommandWrapper.Execute();
+
+            // Assert.True(isDone);
+            // Assert.True(!serverThread.IsRunning());
         }
     }
 }

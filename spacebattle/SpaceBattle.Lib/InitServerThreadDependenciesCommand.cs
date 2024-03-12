@@ -11,9 +11,11 @@ namespace SpaceBattle.Lib
                 "IoC.Register",
                 "Create And Start Thread",
                 (object[] args) => {
-                    return new ServerThread(
+                    var serverThread = new ServerThread(
                         new BlockingCollection<ICommand>()
                     );
+                    serverThread.Start();
+                    return serverThread;
                 }
             ).Execute();
 
