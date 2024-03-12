@@ -13,7 +13,7 @@ namespace SpaceBattle.Lib
 
         public void Execute()
         {
-            if(_threadId is not ""){
+            if(_threadId is not "" && _threadId is not null){
                 IoC.Resolve<ICommand>("Server.Thread.SoftStop", _threadId).Execute();
             }
             else throw new Exception();

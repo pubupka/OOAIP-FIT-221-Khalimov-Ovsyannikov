@@ -81,8 +81,10 @@ namespace SpaceBattle.Lib.Tests
                     }).Execute();
 
             var cmd = IoC.Resolve<ICommand>("Server.Thread.Stop", "");
-
+            var cmd2 = new StopServerCommand(null);
+            
             Assert.Throws<Exception>(cmd.Execute);
+            Assert.Throws<Exception>(cmd2.Execute);
         }
     }
 }
