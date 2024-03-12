@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SpaceBattle.Lib.Tests
+﻿namespace SpaceBattle.Lib.Tests
 {
     public class WriteHandlerTests
     {
@@ -13,12 +8,12 @@ namespace SpaceBattle.Lib.Tests
             var cmd = new InitStartAndStopServerCommand();
             Exception exc = new DivideByZeroException();
 
-            WriterHandler handler = new WriterHandler(cmd, exc);
+            var handler = new WriterHandler(cmd, exc);
             handler.Handle();
-            
+
             var path = "../../../Log.txt";
             var str = File.ReadLines(path);
-            Assert.True(str.Contains("При выполнении команды < SpaceBattle.Lib.InitStartAndStopServerCommand > возникло исключение < System.DivideByZeroException >"));
+            Assert.Contains("При выполнении команды < SpaceBattle.Lib.InitStartAndStopServerCommand > возникло исключение < System.DivideByZeroException >", str);
         }
     }
 }

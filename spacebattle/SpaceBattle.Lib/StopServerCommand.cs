@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
-    public class StopServerCommand:ICommand
+    public class StopServerCommand : ICommand
     {
-        private string _threadId;
+        private readonly string _threadId;
 
         public StopServerCommand(string threadId)
         {

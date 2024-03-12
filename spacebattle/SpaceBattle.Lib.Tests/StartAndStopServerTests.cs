@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib.Tests
 {
     public class StartAndStopServerTests
     {
-       public StartAndStopServerTests()
+        public StartAndStopServerTests()
         {
             new InitScopeBasedIoCImplementationCommand().Execute();
 
@@ -27,15 +23,15 @@ namespace SpaceBattle.Lib.Tests
             var mockStopCommand = new Mock<ICommand>();
             mockStopCommand.Setup(x => x.Execute()).Verifiable();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread",(object[] args)=>
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread", (object[] args) =>
                 {
                     return mockStartCommand.Object;
                 }).Execute();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.SoftStop",
-                    (object[] args)=>
+                    (object[] args) =>
                     {
-                        ICommand thread = IoC.Resolve<ICommand>("Server.Threads.Collection."+(string)args[0]);
+                        var thread = IoC.Resolve<ICommand>("Server.Threads.Collection." + (string)args[0]);
                         return mockStopCommand.Object;
                     }).Execute();
 
@@ -56,15 +52,15 @@ namespace SpaceBattle.Lib.Tests
             var mockStopCommand = new Mock<ICommand>();
             mockStopCommand.Setup(x => x.Execute()).Verifiable();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread",(object[] args)=>
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread", (object[] args) =>
                 {
                     return mockStartCommand.Object;
                 }).Execute();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.SoftStop",
-                    (object[] args)=>
+                    (object[] args) =>
                     {
-                        ICommand thread = IoC.Resolve<ICommand>("Server.Threads.Collection."+(string)args[0]);
+                        var thread = IoC.Resolve<ICommand>("Server.Threads.Collection." + (string)args[0]);
                         return mockStopCommand.Object;
                     }).Execute();
 
@@ -73,6 +69,6 @@ namespace SpaceBattle.Lib.Tests
 
             mockStartCommand.Verify(x => x.Execute(), Times.Exactly(5));
             mockStopCommand.Verify(x => x.Execute(), Times.Once());
-        } 
+        }
     }
 }
