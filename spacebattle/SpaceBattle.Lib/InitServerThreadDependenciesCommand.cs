@@ -15,6 +15,8 @@ namespace SpaceBattle.Lib
                         new BlockingCollection<ICommand>()
                     );
                     serverThread.Start();
+                    var act = (Action)args[0];
+                    act();
                     return serverThread;
                 }
             ).Execute();

@@ -46,7 +46,9 @@ namespace SpaceBattle.Lib
                 action();
             }
             else
+            {
                 throw new ThreadStateException();
+            }
         }
 
         public int GetId()
