@@ -15,6 +15,7 @@ namespace SpaceBattle.Lib
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.Stop", (object[] args) =>
             {
                 var id = Convert.ToString(args[0]);
+                IoC.Resolve<ICommand>("ManualResetEvent.Set").Execute();
                 return new StopServerCommand(id);
             }).Execute();
 
