@@ -104,7 +104,7 @@ public class StartMoveCommand_Tests
     {
         var queue = new Mock<IQueue>();
         var realQueue = new Queue<ICommand>();
-        queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(() => {});
+        queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(() => { });
         IoC.Resolve<Hwdtech.ICommand>(
             "IoC.Register",
             "Game.Queue",
