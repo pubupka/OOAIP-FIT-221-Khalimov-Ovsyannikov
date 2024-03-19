@@ -16,8 +16,9 @@
             if (_thread.IsCurrent())
             {
                 var strategy = _thread.GetStrategy();
-                _thread.ChangeStrategy(() => {
-                    if(!_thread.IsEmpty())
+                _thread.ChangeStrategy(() =>
+                {
+                    if (!_thread.IsEmpty())
                     {
                         strategy();
                     }
@@ -32,7 +33,7 @@
             {
                 throw new ThreadStateException();
             }
-            
+
             // _thread.ActionWithIdCheck(
             //     _id,
             //     () => _thread.ChangeStrategy(_thread.SoftStopStrategy)
@@ -41,33 +42,33 @@
     }
 }
 
-    // private ServerThread _t;
-    // private Action _a;
-    // public SoftStopCommand(ServerThread t, Action a)
-    // {
-    //     _t = t;
-    //     _a = a;
-    // }
+// private ServerThread _t;
+// private Action _a;
+// public SoftStopCommand(ServerThread t, Action a)
+// {
+//     _t = t;
+//     _a = a;
+// }
 
-    // public void Execute()
-    // {
-    //     if (_t.IsCurrent())
-    //     {
-    //         var obehaviour = _t.GetBehaviour();
-    //         _t.SetBehaviour(() => {
-    //             if(_t.QCount() != 0)
-    //             {
-    //                 obehaviour();
-    //             }
-    //             else
-    //             {
-    //                 _t.Stop();
-    //                 _a();
-    //             }
-    //         });
-    //     }
-    //     else
-    //     {
-    //         throw new Exception("ExceptionSoftStop");
-    //     }
-    // }
+// public void Execute()
+// {
+//     if (_t.IsCurrent())
+//     {
+//         var obehaviour = _t.GetBehaviour();
+//         _t.SetBehaviour(() => {
+//             if(_t.QCount() != 0)
+//             {
+//                 obehaviour();
+//             }
+//             else
+//             {
+//                 _t.Stop();
+//                 _a();
+//             }
+//         });
+//     }
+//     else
+//     {
+//         throw new Exception("ExceptionSoftStop");
+//     }
+// }
