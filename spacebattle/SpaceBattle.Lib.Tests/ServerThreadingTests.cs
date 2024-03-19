@@ -28,7 +28,7 @@ namespace SpaceBattle.Lib.Tests
             var mre = new ManualResetEvent(false);
             var q = new BlockingCollection<ICommand>();
             var serverThread = new ServerThread(q);
-            var id = serverThread.GetId();
+            var id = 1;
 
             var cmd = new Mock<ICommand>();
             cmd.Setup(c => c.Execute()).Verifiable();
@@ -44,7 +44,7 @@ namespace SpaceBattle.Lib.Tests
             mre.WaitOne();
 
             Assert.Single(q);
-            Assert.True(!serverThread.IsRunning());
+            Assert.False(serverThread.IsRunning());
             cmd.Verify(c => c.Execute(), Times.Once);
         }
 
@@ -52,7 +52,7 @@ namespace SpaceBattle.Lib.Tests
         public void HardStop_ThrowsException_InvalidId()
         {
             var serverThread = new ServerThread(new BlockingCollection<ICommand>());
-            var id = 123;  // какой-попало айди
+            var id = 1;
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
             var hardStopCommandWrapper = IoC.Resolve<ICommand>("Hard Stop The Thread", id, () => { });
@@ -61,14 +61,13 @@ namespace SpaceBattle.Lib.Tests
         }
 
         [Fact]
-        public void SoftStop_Positive()  // IMPOSTER
+        public void SoftStop_Positive()
         {
-            var q = new BlockingCollection<ICommand>();
             var serverThread = IoC.Resolve<ServerThread>("Create And Start Thread", () =>
             {
 
             });
-            var id = serverThread.GetId();
+            var id = 1;
 
             var cmd = new Mock<ICommand>();
             cmd.Setup(c => c.Execute()).Verifiable();
@@ -78,24 +77,22 @@ namespace SpaceBattle.Lib.Tests
 
             serverThread.AddCommand(cmd.Object);
             serverThread.AddCommand(cmd.Object);
-
             serverThread.AddCommand(IoC.Resolve<ICommand>("Soft Stop The Thread", id, () => { mre.Set(); }));
             serverThread.AddCommand(cmd.Object);
             serverThread.AddCommand(cmd.Object);
 
             mre.WaitOne();
-            Thread.Sleep(100);
 
-            Assert.Empty(q);
-            Assert.True(!serverThread.IsRunning());
+            Assert.True(serverThread.IsEmpty());
+            Assert.False(serverThread.IsRunning());
             cmd.Verify(c => c.Execute(), Times.Exactly(4));
         }
 
         [Fact]
-        public void SoftStop_ThrowsException_InvalidId()
+        public void SoftStop_ThrowsException()
         {
             var serverThread = new ServerThread(new BlockingCollection<ICommand>());
-            var id = 123;  // какой-попало айди
+            var id = 1;
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
             var softStopCommandWrapper = IoC.Resolve<ICommand>("Soft Stop The Thread", id, () => { });
@@ -110,7 +107,7 @@ namespace SpaceBattle.Lib.Tests
             var q = new BlockingCollection<ICommand>();
             var serverThread = new ServerThread(q);
             var cmd = new Mock<ICommand>();
-            var id = serverThread.GetId();
+            var id = 1;
             cmd.Setup(m => m.Execute()).Verifiable();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
@@ -155,7 +152,7 @@ namespace SpaceBattle.Lib.Tests
         {
             var q = new BlockingCollection<ICommand>();
             var serverThread = new ServerThread(q);
-            var id = serverThread.GetId();
+            var id = 1;
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
 
             IoC.Resolve<object>("Send Command", id, new Mock<ICommand>().Object);

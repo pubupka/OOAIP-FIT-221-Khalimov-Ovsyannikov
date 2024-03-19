@@ -3,17 +3,22 @@
     public class HardStopCommand : ICommand
     {
         private readonly ServerThread _thread;
-        private readonly int _id;
 
-        public HardStopCommand(ServerThread thread, int id)
+        public HardStopCommand(ServerThread thread)
         {
             _thread = thread;
-            _id = id;
         }
 
         public void Execute()
         {
-            _thread.ActionWithIdCheck(_id, _thread.Stop);
+            if (_thread.IsCurrent())
+            {
+                _thread.Stop();
+            }
+            else
+            {
+                throw new ThreadStateException();
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ namespace SpaceBattle.Lib
                 (object[] args) =>
                 {
                     var thread = IoC.Resolve<ServerThread>("GetThreadById", (int)args[0]);
-                    var hardStopCommand = new HardStopCommand(thread, (int)args[0]);
+                    var hardStopCommand = new HardStopCommand(thread);
 
                     var commandWrapper = new CommandWrapper(hardStopCommand, (Action)args[1]);
 
@@ -53,11 +53,9 @@ namespace SpaceBattle.Lib
                 (object[] args) =>
                 {
                     var thread = IoC.Resolve<ServerThread>("GetThreadById", (int)args[0]);
-                    var softStopCommand = new SoftStopCommand(thread, (int)args[0]);
+                    var softStopCommand = new SoftStopCommand(thread, (Action)args[1]);
 
-                    var commandWrapper = new CommandWrapper(softStopCommand, (Action)args[1]);
-
-                    return commandWrapper;
+                    return softStopCommand;
                 }
             ).Execute();
         }

@@ -40,23 +40,6 @@ namespace SpaceBattle.Lib
             _queue.Add(cmd);
         }
 
-        public void ActionWithIdCheck(int id, Action action)
-        {
-            if (id == _thread.ManagedThreadId)
-            {
-                action();
-            }
-            else
-            {
-                throw new ThreadStateException();
-            }
-        }
-
-        public int GetId()
-        {
-            return _thread.ManagedThreadId;
-        }
-
         public bool IsEmpty()
         {
             return _queue.Count == 0;
@@ -64,7 +47,17 @@ namespace SpaceBattle.Lib
 
         public bool IsRunning()
         {
-            return _thread.IsAlive;
+            return !_stop;
+        }
+
+        public bool IsCurrent()
+        {
+            return _thread == Thread.CurrentThread;
+        }
+
+        public Action GetStrategy()
+        {
+            return _strategy;
         }
 
         internal void Stop()
@@ -82,18 +75,6 @@ namespace SpaceBattle.Lib
             catch (Exception e)
             {
                 IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
-            }
-        }
-
-        internal void SoftStopStrategy()
-        {
-            if (IsEmpty())
-            {
-                Stop();
-            }
-            else
-            {
-                BaseStrategy();
             }
         }
     }
