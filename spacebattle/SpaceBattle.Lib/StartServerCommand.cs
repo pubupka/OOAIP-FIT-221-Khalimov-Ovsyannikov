@@ -4,20 +4,17 @@ namespace SpaceBattle.Lib
 {
     public class StartServerCommand : ICommand
     {
-        private readonly string? _threadId;
-        public StartServerCommand(string? threadId)
+        private readonly int _serverSize;
+        public StartServerCommand(int serverSize)
         {
-            _threadId = threadId;
+            _serverSize = serverSize;
         }
         public void Execute()
         {
-            var _thread = IoC.Resolve<ICommand>("Server.Thread");
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Threads.Collection." + _threadId, (object[] args) =>
+            for(int i = 0; i < _serverSize; i++)
             {
-                var thread = _thread;
-                return thread;
-            }).Execute();
-            _thread.Execute();
+              IoC.Resolve<ICommand>("Server.Thread.Start", i).Execute();  
+            }
         }
     }
 }

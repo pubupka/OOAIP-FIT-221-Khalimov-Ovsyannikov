@@ -1,22 +1,19 @@
 ﻿using Hwdtech;
+using System.Collections.Concurrent;
 
 namespace SpaceBattle.Lib
 {
     public class StopServerCommand : ICommand
     {
-        private readonly string? _threadId;
-
-        public StopServerCommand(string? threadId)
-        {
-            _threadId = threadId;
-        }
-
         public void Execute()
         {
-            if(_threadId is not "" && _threadId is not null){
-                IoC.Resolve<ICommand>("Server.Thread.SoftStop", _threadId).Execute();
-            }
-            else throw new Exception();
+            var dictOfThreads = IoC.Resolve<ConcurrentDictionary<int, BlockingCollection<ICommand>>>("Server.Take.Threads");
+
+            dictOfThreads.ToList().ForEach(keyValuePair => {
+                IoC.Resolve<ICommand>("Server.SendCommand",
+                keyValuePair.Key,
+                IoC.Resolve<ICommand>("Server.SoftStopCommand", IoC.Resolve<Action>("Server.Action"))).Execute();
+            });
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Hwdtech;
 using Hwdtech.Ioc;
+using System.Collections.Concurrent;
 
 namespace SpaceBattle.Lib.Tests
 {
@@ -11,103 +12,72 @@ namespace SpaceBattle.Lib.Tests
 
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New",
             IoC.Resolve<object>("Scopes.Root"))).Execute();
-            new InitStartAndStopServerCommand().Execute();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Threads.Collection." + "-1", (object[] args) =>
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Start",(object[] args)=>
             {
-                var thread = new EmptyCommand();
-                return thread;
+                return new StartServerCommand((int)args[0]);
+            }).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.Stop", (object[] args)=>
+            {
+                return new StopServerCommand();
             }).Execute();
         }
 
         [Fact]
         public void StartAndStopServerTestPositive()
         {
-                        
-            ManualResetEvent mre = new ManualResetEvent(false);
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ManualResetEvent.Set", (object[] args)=>{
-                mre.Set();
-                return new EmptyCommand();}).Execute();
-
+            var barrier = new Barrier(6); // 5 потоков+мейн
             var mockStartCommand = new Mock<ICommand>();
             mockStartCommand.Setup(x => x.Execute()).Verifiable();
 
             var mockStopCommand = new Mock<ICommand>();
             mockStopCommand.Setup(x => x.Execute()).Verifiable();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread", (object[] args) =>
-                {
-                    return mockStartCommand.Object;
-                }).Execute();
+            var threadsCollection = new ConcurrentDictionary<int, BlockingCollection<ICommand>>();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.SoftStop",
-                    (object[] args) =>
-                    {
-                        var thread = IoC.Resolve<ICommand>("Server.Threads.Collection." + (string)args[0]);
-                        return mockStopCommand.Object;
-                    }).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.Start", (object[] args)=>
+            {
+                var index = (int)args[0];
+                threadsCollection.AddOrUpdate(index, new BlockingCollection<ICommand>(), (k,v) => v);
 
-            IoC.Resolve<ICommand>("Server.Start.AllThreads", 5).Execute();
+                return mockStartCommand.Object;
+            }).Execute();
 
-            IoC.Resolve<ICommand>("Server.Stop.AllThreads", 5).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.Take.Threads", (object[] args)=>
+            {
+                return threadsCollection;
+            }).Execute();
 
-            mre.WaitOne();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Action", (object[] args)=>
+            {
+                return ()=>{barrier.RemoveParticipant();};
+            }).Execute();
 
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.SoftStopCommand", (object[] args)=>
+            {
+                var actCommand = new ActionCommand((Action) args[0]);
+                var cmds = new ICommand[2]{mockStopCommand.Object, actCommand};
+                return new MacroCommand(cmds);
+            }).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.SendCommand", (object[] args)=>
+            {
+                var index = (int)args[0];
+                var cmd = (ICommand)args[1];
+                threadsCollection[index].Add(cmd);
+                return cmd;
+            }).Execute();
+
+            IoC.Resolve<ICommand>("Server.Start", 5).Execute();
+            IoC.Resolve<ICommand>("Server.Stop").Execute();
+           
             mockStartCommand.Verify(x => x.Execute(), Times.Exactly(5));
             mockStopCommand.Verify(x => x.Execute(), Times.Exactly(5));
-
-            IoC.Resolve<ICommand>("Server.Thread.SoftStop", "-1").Execute();
-            mockStopCommand.Verify(x => x.Execute(), Times.Exactly(6));
-        }
-
-        [Fact]
-        public void StopServerByIdTest()
-        {        
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ManualResetEvent.Set", (object[] args)=>{
-                return new EmptyCommand();}).Execute();
-
-            var mockStartCommand = new Mock<ICommand>();
-            mockStartCommand.Setup(x => x.Execute()).Verifiable();
-
-            var mockStopCommand = new Mock<ICommand>();
-            mockStopCommand.Setup(x => x.Execute()).Verifiable();
-
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread", (object[] args) =>
-                {
-                    return mockStartCommand.Object;
-                }).Execute();
-
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.SoftStop",
-                    (object[] args) =>
-                    {
-                        var thread = IoC.Resolve<ICommand>("Server.Threads.Collection." + (string)args[0]);
-                        return mockStopCommand.Object;
-                    }).Execute();
-
-            IoC.Resolve<ICommand>("Server.Start.AllThreads", 5).Execute();
-            new StopServerCommand("3").Execute();
-
-            mockStartCommand.Verify(x => x.Execute(), Times.Exactly(5));
-            mockStopCommand.Verify(x => x.Execute(), Times.Once());
-        }
-
-        [Fact]
-        public void StopUnexistingServer()
-        {       
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ManualResetEvent.Set", (object[] args)=>{
-                return new EmptyCommand();}).Execute();
-
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.SoftStop",
-                (object[] args) =>
-                    {
-                        return new EmptyCommand();
-                    }).Execute();
-
-            var cmd = IoC.Resolve<ICommand>("Server.Thread.Stop", "");
-            var cmd2 = new StopServerCommand(null);
             
-            Assert.Throws<Exception>(cmd.Execute);
-            Assert.Throws<Exception>(cmd2.Execute);
+            barrier.SignalAndWait();
+            IoC.Resolve<ICommand>("Server.SoftStopCommand", ()=>{}).Execute();
+            mockStopCommand.Verify(x => x.Execute(), Times.Exactly(6));
         }
     }
 }

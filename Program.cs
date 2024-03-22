@@ -12,9 +12,9 @@ namespace SpaceBattle.Lib
         public void Main(string[] args)
         {
             var count = int.Parse(args[0]);
-            IoC.Resolve<ICommand>("Server.Start.AllThreads", count).Execute();
+            IoC.Resolve<ICommand>("Server.Start", count).Execute();
             Console.ReadKey();
-            IoC.Resolve<ICommand>("Server.Stop.AllThreads", count).Execute();
+            IoC.Resolve<ICommand>("Server.Stop").Execute();
         }
     }
 }
