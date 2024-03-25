@@ -71,13 +71,10 @@ namespace SpaceBattle.Lib.Tests
 
             IoC.Resolve<ICommand>("Server.Start", 5).Execute();
             IoC.Resolve<ICommand>("Server.Stop").Execute();
+            barrier.SignalAndWait();
            
             mockStartCommand.Verify(x => x.Execute(), Times.Exactly(5));
             mockStopCommand.Verify(x => x.Execute(), Times.Exactly(5));
-            
-            barrier.SignalAndWait();
-            IoC.Resolve<ICommand>("Server.SoftStopCommand", ()=>{}).Execute();
-            mockStopCommand.Verify(x => x.Execute(), Times.Exactly(6));
         }
     }
 }

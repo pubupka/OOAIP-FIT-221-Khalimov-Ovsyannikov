@@ -15,19 +15,6 @@ namespace SpaceBattle.Lib.Tests
 
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New",
             IoC.Resolve<object>("Scopes.Root"))).Execute();
-
-            var cmd = new Mock<ICommand>();
-            cmd.Setup(x => x.Execute());
-
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Start",(object[] args)=>
-            {
-                return cmd.Object;
-            }).Execute();
-
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.Stop", (object[] args)=>
-            {
-                return cmd.Object;
-            }).Execute();
         }
         [Fact]
         public void RunMainCommandTest()
@@ -38,6 +25,24 @@ namespace SpaceBattle.Lib.Tests
             Console.SetIn(inputManager);
             var outputManager = new StringWriter();
             Console.SetOut(outputManager);
+
+            var cmd = new Mock<ICommand>();
+            cmd.Setup(x => x.Execute());
+             IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.MakeBarrier", (object[] args) =>{
+                var _count = (int) args[0];
+                return new Barrier(_count+1);
+            }).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Start",(object[] args)=>
+            {
+                return cmd.Object;
+            }).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.Stop", (object[] args)=>
+            {
+                IoC.Resolve<Barrier>("Server.TakeBarrier").RemoveParticipants(count);
+                return cmd.Object;
+            }).Execute();
 
             var maincmd = new RunMainCommand(count);
             maincmd.Execute();
