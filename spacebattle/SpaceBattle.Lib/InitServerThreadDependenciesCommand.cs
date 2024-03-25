@@ -28,8 +28,8 @@ namespace SpaceBattle.Lib
                 (object[] args) =>
                 {
                     var thread = IoC.Resolve<ServerThread>("GetThreadById", (int)args[0]);
-                    thread.AddCommand((ICommand)args[1]);
-                    return new object();
+                    var cmd = (ICommand)args[1];
+                    return new SendCommand(thread, cmd);
                 }
             ).Execute();
 

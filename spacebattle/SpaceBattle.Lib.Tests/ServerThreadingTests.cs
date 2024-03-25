@@ -26,8 +26,7 @@ namespace SpaceBattle.Lib.Tests
         public void HardStop_Positive()
         {
             var mre = new ManualResetEvent(false);
-            var q = new BlockingCollection<ICommand>();
-            var serverThread = new ServerThread(q);
+            var serverThread = IoC.Resolve<ServerThread>("Create And Start Thread", () => { });
             var id = 1;
 
             var cmd = new Mock<ICommand>();
@@ -36,14 +35,12 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
             var hardStopCommandWrapper = IoC.Resolve<ICommand>("Hard Stop The Thread", id, () => { mre.Set(); });
 
-            serverThread.AddCommand(cmd.Object);
-            serverThread.AddCommand(hardStopCommandWrapper);
-            serverThread.AddCommand(cmd.Object);
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, hardStopCommandWrapper).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
 
-            serverThread.Start();
-            mre.WaitOne();
+            mre.WaitOne(1000);
 
-            Assert.Single(q);
             Assert.False(serverThread.IsRunning());
             cmd.Verify(c => c.Execute(), Times.Once);
         }
@@ -63,28 +60,29 @@ namespace SpaceBattle.Lib.Tests
         [Fact]
         public void SoftStop_Positive()
         {
-            var serverThread = IoC.Resolve<ServerThread>("Create And Start Thread", () =>
-            {
-
-            });
+            var mre = new ManualResetEvent(false);
+            var serverThread = IoC.Resolve<ServerThread>("Create And Start Thread", () => { });
             var id = 1;
 
             var cmd = new Mock<ICommand>();
             cmd.Setup(c => c.Execute()).Verifiable();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
-            var mre = new ManualResetEvent(false);
 
-            serverThread.AddCommand(cmd.Object);
-            serverThread.AddCommand(cmd.Object);
-            serverThread.AddCommand(IoC.Resolve<ICommand>("Soft Stop The Thread", id, () => { mre.Set(); }));
-            serverThread.AddCommand(cmd.Object);
-            serverThread.AddCommand(cmd.Object);
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
+            IoC.Resolve<ICommand>(
+                "Send Command",
+                id,
+                IoC.Resolve<ICommand>("Soft Stop The Thread", id, () => { mre.Set(); })
+            ).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
 
-            mre.WaitOne();
+            mre.WaitOne(1000);
 
-            Assert.True(serverThread.IsEmpty());
             Assert.False(serverThread.IsRunning());
+            Assert.True(serverThread.IsEmpty());
             cmd.Verify(c => c.Execute(), Times.Exactly(4));
         }
 
@@ -131,33 +129,20 @@ namespace SpaceBattle.Lib.Tests
                 IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Exception.Handle", (object[] args) => handleCommand.Object)
             );
 
-            q.Add(adaptedSetScopeCommand);
-            q.Add(adaptedRegisterCommand);
-            q.Add(cmd.Object);
-            q.Add(cmdE.Object);
-            q.Add(cmd.Object);
-            q.Add(hardStopCommandWrapper);
-            q.Add(cmd.Object);
+            IoC.Resolve<ICommand>("Send Command", id, adaptedSetScopeCommand).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, adaptedRegisterCommand).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmdE.Object).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, hardStopCommandWrapper).Execute();
+            IoC.Resolve<ICommand>("Send Command", id, cmd.Object).Execute();
 
             serverThread.Start();
-            mre.WaitOne();
+            mre.WaitOne(1000);
 
             Assert.Single(q);
             cmd.Verify(m => m.Execute(), Times.Exactly(2));
             handleCommand.Verify(m => m.Execute(), Times.Once());
-        }
-
-        [Fact]
-        public void SendCommandPositive()
-        {
-            var q = new BlockingCollection<ICommand>();
-            var serverThread = new ServerThread(q);
-            var id = 1;
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetThreadById", (object id) => { return serverThread; }).Execute();
-
-            IoC.Resolve<object>("Send Command", id, new Mock<ICommand>().Object);
-
-            Assert.Single(q);
         }
     }
 }
