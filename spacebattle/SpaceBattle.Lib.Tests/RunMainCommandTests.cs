@@ -29,7 +29,7 @@ namespace SpaceBattle.Lib.Tests
 
             var cmd = new Mock<ICommand>();
             cmd.Setup(x => x.Execute());
-            
+
              IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.MakeBarrier", (object[] args) =>{
                 return barrier;
             }).Execute();
@@ -47,7 +47,6 @@ namespace SpaceBattle.Lib.Tests
 
             var maincmd = new RunMainCommand(count);
             maincmd.Execute();
-
             var output = outputManager.ToString();
 
             Assert.Contains($"Запуск {count}-ти поточного сервера", output);
