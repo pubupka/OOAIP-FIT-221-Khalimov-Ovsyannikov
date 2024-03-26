@@ -17,7 +17,7 @@ namespace SpaceBattle.Lib.Tests
         public void WriteHandlerPositiveTest()
         {
             var cmd = new EmptyCommand();
-            Exception exc = new DivideByZeroException();
+            var exc = new DivideByZeroException();
             var path = Path.GetTempFileName();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetReportInfo",(object[] args)=>
@@ -29,6 +29,7 @@ namespace SpaceBattle.Lib.Tests
             {
                 return path;
             }).Execute();
+
             var handler = new WriterHandler(cmd, exc);
             handler.Handle();
             
