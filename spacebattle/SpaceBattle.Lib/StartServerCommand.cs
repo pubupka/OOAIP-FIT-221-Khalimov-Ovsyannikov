@@ -11,10 +11,9 @@ namespace SpaceBattle.Lib
         }
         public void Execute()
         {
-            for(int i = 0; i < _serverSize; i++)
-            {
-              IoC.Resolve<ICommand>("Server.Thread.Start", i).Execute();  
-            }
+            
+            var indexes = Enumerable.Range(1, _serverSize).ToList();
+            indexes.ForEach(i => IoC.Resolve<ICommand>("Server.Thread.Start", i).Execute());  
         }
     }
 }
