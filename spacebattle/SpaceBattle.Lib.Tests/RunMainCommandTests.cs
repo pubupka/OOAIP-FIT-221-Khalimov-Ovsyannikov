@@ -20,6 +20,7 @@ namespace SpaceBattle.Lib.Tests
         public void RunMainCommandTest()
         {
             var count = 5;
+            var barrier = new Barrier(count+1);
 
             var inputManager = new StringReader("Enter");
             Console.SetIn(inputManager);
@@ -28,9 +29,9 @@ namespace SpaceBattle.Lib.Tests
 
             var cmd = new Mock<ICommand>();
             cmd.Setup(x => x.Execute());
+            
              IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.MakeBarrier", (object[] args) =>{
-                var _count = (int) args[0];
-                return new Barrier(_count+1);
+                return barrier;
             }).Execute();
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Start",(object[] args)=>
@@ -40,7 +41,7 @@ namespace SpaceBattle.Lib.Tests
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.Stop", (object[] args)=>
             {
-                IoC.Resolve<Barrier>("Server.TakeBarrier").RemoveParticipants(count);
+                barrier.RemoveParticipants(count);
                 return cmd.Object;
             }).Execute();
 
