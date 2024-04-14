@@ -1,8 +1,8 @@
-using Hwdtech;
+﻿using Hwdtech;
 
 public class InitTreeCommand : ICommand
 {
-    Dictionary<Type, object> _tree;
+    private readonly Dictionary<Type, object> _tree;
     public InitTreeCommand(Dictionary<Type, object> tree)
     {
         _tree = tree;

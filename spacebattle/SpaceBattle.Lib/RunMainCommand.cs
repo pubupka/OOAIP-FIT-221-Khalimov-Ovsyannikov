@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
-    public class RunMainCommand: ICommand
+    public class RunMainCommand : ICommand
     {
-        private int _count;
+        private readonly int _count;
         public RunMainCommand(int count)
         {
             _count = count;

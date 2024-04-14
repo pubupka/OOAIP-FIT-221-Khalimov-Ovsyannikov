@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib.Tests
@@ -20,7 +16,7 @@ namespace SpaceBattle.Lib.Tests
         public void RunMainCommandTest()
         {
             var count = 5;
-            var barrier = new Barrier(count+1);
+            var barrier = new Barrier(count + 1);
 
             var inputManager = new StringReader("Enter");
             Console.SetIn(inputManager);
@@ -30,16 +26,17 @@ namespace SpaceBattle.Lib.Tests
             var cmd = new Mock<ICommand>();
             cmd.Setup(x => x.Execute());
 
-             IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.MakeBarrier", (object[] args) =>{
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.MakeBarrier", (object[] args) =>
+            {
                 return barrier;
             }).Execute();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Start",(object[] args)=>
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Start", (object[] args) =>
             {
                 return cmd.Object;
             }).Execute();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.Stop", (object[] args)=>
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Stop", (object[] args) =>
             {
                 barrier.RemoveParticipants(count);
                 return cmd.Object;

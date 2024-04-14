@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SpaceBattle.Lib
+﻿namespace SpaceBattle.Lib
 {
-    public class ActionCommand:ICommand
+    public class ActionCommand : ICommand
     {
-        private Action _act;
+        private readonly Action _act;
         public ActionCommand(Action act)
         {
             _act = act;
