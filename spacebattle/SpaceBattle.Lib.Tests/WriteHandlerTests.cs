@@ -20,19 +20,18 @@ namespace SpaceBattle.Lib.Tests
             var exc = new DivideByZeroException();
             var path = Path.GetTempFileName();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetReportInfo",(object[] args)=>
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetReportInfo", (object[] args) =>
             {
                 return (string)new GetReportStrategy().Invoke(args);
             }).Execute();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetLogFilePath",(object[] args)=>
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetLogFilePath", (object[] args) =>
             {
                 return path;
             }).Execute();
 
             var handler = new WriterHandler(cmd, exc);
             handler.Handle();
-            
 
             var str = File.ReadLines(path).Last();
             Assert.Contains("При выполнении команды < SpaceBattle.Lib.EmptyCommand > возникло исключение < System.DivideByZeroException >", str);

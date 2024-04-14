@@ -1,5 +1,5 @@
-﻿using Hwdtech;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
@@ -9,7 +9,8 @@ namespace SpaceBattle.Lib
         {
             var dictOfThreads = IoC.Resolve<ConcurrentDictionary<int, BlockingCollection<ICommand>>>("Server.Take.Threads");
 
-            dictOfThreads.ToList().ForEach(keyValuePair => {
+            dictOfThreads.ToList().ForEach(keyValuePair =>
+            {
                 IoC.Resolve<ICommand>("Server.SendCommand",
                 keyValuePair.Key,
                 IoC.Resolve<ICommand>("Server.SoftStopCommand", IoC.Resolve<Action>("Server.Action"))).Execute();

@@ -84,7 +84,7 @@ public class FindHandlerCommandTests
 
         new InitTreeCommand(tree).Execute();
         new InitDefaultHandlerCommand(defaulthandler.Object).Execute();
-        
+
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.EmptyCommand_AnyException_Handler", (object[] args) =>
         {
             return handler.Object;

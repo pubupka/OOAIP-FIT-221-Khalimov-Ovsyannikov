@@ -37,7 +37,7 @@ namespace SpaceBattle.Lib.Tests
             var queue = new Mock<IQueue>();
             var realQueue = new Queue<ICommand>();
             queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
-            queue.Setup(q => q.Take()).Returns(()=>realQueue.Dequeue());
+            queue.Setup(q => q.Take()).Returns(() => realQueue.Dequeue());
 
             IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
@@ -61,7 +61,8 @@ namespace SpaceBattle.Lib.Tests
             queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command." + name, (object[] args) => mockCommand.Object).Execute();
-             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.ConvertToStartable", (object[] args) => {
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.ConvertToStartable", (object[] args) =>
+            {
                 var emptyStartableObject = new Mock<IMoveStartable>();
                 emptyStartableObject.Setup(x => x.Order).Returns((IUObject)args[0]);
                 emptyStartableObject.Setup(x => x.PropertiesOfOrder).Returns(new Dictionary<string, object>());
@@ -73,7 +74,7 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Operation." + name, (object[] args) => { return new LongOperationStrategy(name, (IUObject)args[0]).Invoke(); }).Execute();
 
             IoC.Resolve<ICommand>("Game.Operation." + name, mockUObject.Object).Execute();
-            
+
             queue.Object.Take().Execute();
             mockCommand.Verify();
         }
@@ -93,7 +94,7 @@ namespace SpaceBattle.Lib.Tests
             var realQueue = new Queue<ICommand>();
 
             queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
-            queue.Setup(q => q.Take()).Returns(()=>realQueue.Dequeue());
+            queue.Setup(q => q.Take()).Returns(() => realQueue.Dequeue());
 
             IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
@@ -117,7 +118,8 @@ namespace SpaceBattle.Lib.Tests
             queue.Setup(q => q.Add(It.IsAny<ICommand>())).Callback(realQueue.Enqueue);
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command." + name, (object[] args) => mockCommand.Object).Execute();
-             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.ConvertToStartable", (object[] args) => {
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.ConvertToStartable", (object[] args) =>
+            {
                 var emptyStartableObject = new Mock<IMoveStartable>();
                 emptyStartableObject.Setup(x => x.Order).Returns((IUObject)args[0]);
                 emptyStartableObject.Setup(x => x.PropertiesOfOrder).Returns(new Dictionary<string, object>());
@@ -129,7 +131,7 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Operation." + name, (object[] args) => { return new LongOperationStrategy(name, (IUObject)args[0]).Invoke(); }).Execute();
 
             IoC.Resolve<ICommand>("Game.Operation." + name, mockUObject.Object).Execute();
-            
+
             queue.Object.Take().Execute();
             unactiveMockCommand.Verify(x => x.Execute(), Times.Never);
         }

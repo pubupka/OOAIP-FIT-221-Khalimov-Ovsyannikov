@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SpaceBattle.Lib
+﻿namespace SpaceBattle.Lib
 {
-    public class GetReportStrategy:IStrategy
+    public class GetReportStrategy : IStrategy
     {
         public object Invoke(object[] args)
         {
