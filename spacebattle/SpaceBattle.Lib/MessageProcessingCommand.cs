@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
-    public class MessageProcessingCommand:ICommand
+    public class MessageProcessingCommand : ICommand
     {
-        IProcessable _message;
+        private readonly IProcessable _message;
         public MessageProcessingCommand(IProcessable message)
         {
             _message = message;
