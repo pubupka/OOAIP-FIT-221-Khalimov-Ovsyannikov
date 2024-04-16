@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Hwdtech;
+using Hwdtech.Ioc;
+
+namespace SpaceBattle.Lib.Tests
+{
+    public class MessageProcessingCommandTests
+    {
+        public MessageProcessingCommandTests()
+        {
+            new InitScopeBasedIoCImplementationCommand().Execute();
+            IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
+        }
+
+        [Fact]
+        public void MessageProcessingCommandPositiveTest()
+        {
+            var mockMessage = new Mock<IProcessable>();
+            mockMessage.SetupGet(x => x.gameId).Returns("asdfg");
+            mockMessage.SetupGet(x => x.gameItemId).Returns(1);
+            mockMessage.SetupGet(x => x.attributes).Returns(new Dictionary<string, object>(){{"initial velocity" , 2}});
+            mockMessage.SetupGet(x => x.cmdType).Returns("StartMoveCommand");
+
+            var mockItem = new Mock<IUObject>();
+            mockItem.Setup(x => x.SetProperty(It.IsAny<string>(), It.IsAny<object>()));
+
+            var mockCmd = new Mock<ICommand>();
+            mockCmd.Setup(x=>x.Execute()).Verifiable();
+
+            var itemsByIdDict = new Dictionary<int, IUObject>();
+            itemsByIdDict.Add(1, mockItem.Object);
+
+            var gameItemsdict = new Dictionary<string, Dictionary<int, IUObject>>() {{"asdfg", itemsByIdDict}};
+            var queueOfCmds = new Queue<ICommand>();
+            var gameCmdDict = new Dictionary<string, Queue<ICommand>>(){{"asdfg", queueOfCmds}};
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.StartMoveCommand", (object[] args)=>{
+                return mockCmd.Object;
+            }).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.ProcessedCommand",(object[] args) => 
+            {
+                var message = (IProcessable)args[0];
+                var gameId = message.gameId;
+                var itemId = message.gameItemId;
+                var attributes = message.attributes;
+                var item = gameItemsdict[gameId][itemId];
+
+                attributes.ToList().ForEach(atr => item.SetProperty(atr.Key, atr.Value));
+                return IoC.Resolve<ICommand>("Game.Command." + message.cmdType, item);
+            }).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Get.Queue", (object[] args)=>{
+                var id = (string)args[0];
+                return gameCmdDict[id];
+            }).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Game.Queue.PushByID",(object[] args) => {
+                return new PushByIdStrategy().Invoke(args);
+            }).Execute();
+
+            var queueOfMessages = new Queue<IProcessable>();
+            queueOfMessages.Enqueue(mockMessage.Object);
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register","Server.Take.QueueOfMessages",(object[] args)=> queueOfMessages).Execute();
+            new TakeAndProcessMessageCommand().Execute();
+            Assert.NotEmpty(queueOfCmds);
+            queueOfCmds.Dequeue().Execute();
+            mockCmd.Verify();
+        }
+    }
+}
