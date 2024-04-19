@@ -6,8 +6,8 @@ namespace SpaceBattle.Lib
     {
         public void Execute()
         {
-            var queueOfMessages = IoC.Resolve<Queue<IProcessable>>("Server.Take.QueueOfMessages");
-            new MessageProcessingCommand(queueOfMessages.Dequeue()).Execute();
+            var message = IoC.Resolve<IProcessable>("Server.Take.Message");
+            IoC.Resolve<MessageProcessingCommand>("Game.Commands.MessageProcessingCommand", message).Execute();
         }
     }
 }

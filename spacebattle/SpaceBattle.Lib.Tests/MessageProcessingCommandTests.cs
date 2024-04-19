@@ -33,6 +33,9 @@ namespace SpaceBattle.Lib.Tests
             var queueOfCmds = new Queue<ICommand>();
             var gameCmdDict = new Dictionary<string, Queue<ICommand>>() { { "asdfg", queueOfCmds } };
 
+            var queueOfMessages = new Queue<IProcessable>();
+            queueOfMessages.Enqueue(mockMessage.Object);
+
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.StartMoveCommand", (object[] args) =>
             {
                 return mockCmd.Object;
@@ -61,10 +64,8 @@ namespace SpaceBattle.Lib.Tests
                 return new PushByIdStrategy().Invoke(args);
             }).Execute();
 
-            var queueOfMessages = new Queue<IProcessable>();
-            queueOfMessages.Enqueue(mockMessage.Object);
-
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Take.QueueOfMessages", (object[] args) => queueOfMessages).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Take.Message", (object[] args) => queueOfMessages.Dequeue()).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Commands.MessageProcessingCommand", (object[] args) => new MessageProcessingCommand((IProcessable)args[0])).Execute();
 
             new TakeAndProcessMessageCommand().Execute();
 
