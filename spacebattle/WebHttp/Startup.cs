@@ -1,4 +1,4 @@
-using CoreWCF;
+﻿using CoreWCF;
 using CoreWCF.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;

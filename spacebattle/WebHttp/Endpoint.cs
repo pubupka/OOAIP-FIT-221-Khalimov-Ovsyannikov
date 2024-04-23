@@ -1,6 +1,6 @@
+﻿using System;
 using CoreWCF;
 using Hwdtech;
-using System;
 
 namespace WebHttp
 {
