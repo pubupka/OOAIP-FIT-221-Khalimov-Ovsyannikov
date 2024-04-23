@@ -5,14 +5,14 @@ using System;
 namespace WebHttp
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true)]
-    internal class Endpoint : IWebApi
+    public class Endpoint : IWebApi
     {
         public int ProcessMessage(MessageContract message)
         {
             try
             {
                 var cmd = IoC.Resolve<ICommand>("Build Command From Message", message);
-                var threadId = IoC.Resolve<int>("Get Thread Id By Game Id", message.GameId);
+                var threadId = (int)IoC.Resolve<object>("Get Thread Id By Game Id", message.GameId);
                 IoC.Resolve<ICommand>("Send Command", threadId, cmd).Execute();
                 return 202;
             }
