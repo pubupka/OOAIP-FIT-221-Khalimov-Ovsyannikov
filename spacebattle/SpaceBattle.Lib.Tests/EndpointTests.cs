@@ -66,23 +66,8 @@ namespace SpaceBattle.Lib.Tests
                 }
             ).Execute();
 
-            var handleCommand = new Mock<ICommand>();
-            handleCommand.Setup(cmd => cmd.Execute()).Verifiable();
-
-            IoC.Resolve<Hwdtech.ICommand>(
-                "IoC.Register",
-                "EndPoint.Exception.Handle",
-                (object[] args) =>
-                {
-                    return handleCommand.Object;
-                }
-            ).Execute();
-
             var ep = new Endpoint();
-            var response = ep.ProcessMessage(new MessageContract());
-
-            handleCommand.Verify(cmd => cmd.Execute(), Times.Once());
-            Assert.Equal(0, response);
+            Assert.Throws<Exception>(() => { ep.ProcessMessage(new MessageContract()); });
         }
     }
 }

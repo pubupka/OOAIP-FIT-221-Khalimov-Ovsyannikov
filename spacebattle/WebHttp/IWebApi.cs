@@ -7,13 +7,13 @@ namespace WebHttp
 {
     [ServiceContract]
     [OpenApiBasePath("/api")]
-    internal interface IWebApi
+    public interface IWebApi
     {
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/body")]
         [OpenApiTag("Tag")]
-        [OpenApiResponse(ContentTypes = new[] { "application/json", "text/xml" }, Description = "Success", StatusCode = HttpStatusCode.OK, Type = typeof(MessageContract))]
-        int ProcessMessage(
+        [OpenApiResponse(ContentTypes = new[] { "application/json", "text/xml" }, Description = "Success", StatusCode = HttpStatusCode.Accepted, Type = typeof(MessageContract))]
+        void ProcessMessage(
             [OpenApiParameter(ContentTypes = new[] { "application/json", "text/xml" }, Description = "param description.")] MessageContract param);
     }
 }
