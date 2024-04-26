@@ -1,10 +1,10 @@
-﻿using CoreWCF;
+﻿using System.Diagnostics.CodeAnalysis;
+using CoreWCF;
 using CoreWCF.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using WebHttp;
-using System.Diagnostics.CodeAnalysis;
 
 internal sealed class Startup
 {
@@ -18,7 +18,7 @@ internal sealed class Startup
 
         services.AddSingleton(new SwaggerOptions());
     }
-    
+
     [ExcludeFromCodeCoverage]
     public static void Configure(IApplicationBuilder app)
     {

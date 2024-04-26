@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using System.Diagnostics.CodeAnalysis;
 
-class Program
+internal class Program
 {
     [ExcludeFromCodeCoverage]
     public static void Main(string[] args)
