@@ -13,7 +13,7 @@ namespace SpaceBattle.Lib.Tests
 
             IoC.Resolve<Hwdtech.ICommand>(
                 "IoC.Register",
-                "Get Thread Id By Game Id",
+                "Get ThreadId By GameId",
                 (object[] args) =>
                 {
                     return (object)0;
