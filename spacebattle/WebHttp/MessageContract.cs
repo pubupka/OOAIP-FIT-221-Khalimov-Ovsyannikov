@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using CoreWCF.OpenApi.Attributes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace WebHttp
 {
     [DataContract(Name = "ExampleContract", Namespace = "http://example.com")]
+    [ExcludeFromCodeCoverage]
     public class MessageContract
     {
         [DataMember(Name = "Type of command", Order = 1)]
