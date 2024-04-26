@@ -47,7 +47,7 @@ namespace SpaceBattle.Lib.Tests
                 return mockCmd.Object;
             }).Execute();
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string) args[0]][(int) args[1]]).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string)args[0]][(int)args[1]]).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.ProcessedCommand", (object[] args) =>
             {
                 return new SettingPropertiesAndReturningCommandByMessageStrategy().Invoke(args);
@@ -85,7 +85,7 @@ namespace SpaceBattle.Lib.Tests
 
             var gameItemsdict = new Dictionary<string, Dictionary<int, IUObject>>() { { "asdfg", itemsByIdDict } };
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string) args[0]][(int) args[1]]).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string)args[0]][(int)args[1]]).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.ProcessedCommand", (object[] args) =>
             {
                 return new SettingPropertiesAndReturningCommandByMessageStrategy().Invoke(args);
@@ -112,7 +112,7 @@ namespace SpaceBattle.Lib.Tests
             var queueOfMessages = new Queue<IProcessable>();
             queueOfMessages.Enqueue(mockMessage.Object);
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string) args[0]][(int) args[1]]).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string)args[0]][(int)args[1]]).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.ProcessedCommand", (object[] args) =>
             {
                 return new SettingPropertiesAndReturningCommandByMessageStrategy().Invoke(args);
@@ -143,7 +143,7 @@ namespace SpaceBattle.Lib.Tests
             var queueOfMessages = new Queue<IProcessable>();
             queueOfMessages.Enqueue(mockMessage.Object);
 
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string) args[0]][(int) args[1]]).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.GetItemFromGameItemsdict", (object[] args) => gameItemsdict[(string)args[0]][(int)args[1]]).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.ProcessedCommand", (object[] args) =>
             {
                 return new SettingPropertiesAndReturningCommandByMessageStrategy().Invoke(args);
