@@ -10,8 +10,7 @@ namespace SpaceBattle.Lib
             var gameId = message.gameId;
             var itemId = message.gameItemId;
             var attributes = message.attributes;
-            var gameItemsdict = IoC.Resolve<Dictionary<string, Dictionary<int, IUObject>>>("Server.GameItemsdict");
-            var item = gameItemsdict[gameId][itemId];
+            var item = IoC.Resolve<IUObject>("Server.GetItemFromGameItemsdict", gameId, itemId);;
             attributes.ToList().ForEach(atr => item.SetProperty(atr.Key, atr.Value));
             return IoC.Resolve<ICommand>("Game.Command." + message.cmdType, item);
         }
