@@ -12,8 +12,8 @@ namespace WebHttp
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/body")]
         [OpenApiTag("Tag")]
-        [OpenApiResponse(ContentTypes = new[] { "application/json", "text/xml" }, Description = "Success", StatusCode = HttpStatusCode.Accepted, Type = typeof(MessageContract))]
+        [OpenApiResponse(ContentTypes = new[] { "application/json" }, Description = "Success", StatusCode = HttpStatusCode.Accepted, Type = typeof(MessageContract))]
         void ProcessMessage(
-            [OpenApiParameter(ContentTypes = new[] { "application/json", "text/xml" }, Description = "param description.")] MessageContract param);
+            [OpenApiParameter(ContentTypes = new[] { "application/json" }, Description = "param description.")] MessageContract param);
     }
 }
