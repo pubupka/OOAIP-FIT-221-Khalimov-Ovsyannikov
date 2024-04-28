@@ -46,7 +46,7 @@ namespace SpaceBattle.Lib.Tests
             ).Execute();
 
             var ep = new Endpoint();
-            ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1});
+            ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1 });
 
             sendCommand.Verify(cmd => cmd.Execute(), Times.Once());
         }
@@ -85,7 +85,7 @@ namespace SpaceBattle.Lib.Tests
             ).Execute();
 
             var ep = new Endpoint();
-            Assert.Throws<Exception>(() => { ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1}); });
+            Assert.Throws<Exception>(() => { ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1 }); });
         }
 
         [Fact]
@@ -105,7 +105,7 @@ namespace SpaceBattle.Lib.Tests
 
             var ep = new Endpoint();
 
-            Assert.Throws<Exception>(() => { ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1}); });
+            Assert.Throws<Exception>(() => { ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1 }); });
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace SpaceBattle.Lib.Tests
 
             var ep = new Endpoint();
 
-            Assert.Throws<Exception>(() => { ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1}); });
+            Assert.Throws<Exception>(() => { ep.ProcessMessage(new MessageContract() { TypeOfCommand = "type", GameId = 1, ItemId = 1 }); });
         }
     }
 }
