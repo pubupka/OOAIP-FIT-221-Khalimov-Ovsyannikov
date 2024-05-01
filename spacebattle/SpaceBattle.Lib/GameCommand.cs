@@ -1,5 +1,5 @@
+﻿using System.Diagnostics;
 using Hwdtech;
-using System.Diagnostics;
 
 namespace SpaceBattle.Lib
 {
@@ -19,7 +19,7 @@ namespace SpaceBattle.Lib
         {
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _scope).Execute();
 
-            while(_sw.ElapsedMilliseconds < (int)IoC.Resolve<object>("Game.GetQuant"))
+            while (_sw.ElapsedMilliseconds < (int)IoC.Resolve<object>("Game.GetQuant"))
             {
                 if (_q.Count == 0)
                 {

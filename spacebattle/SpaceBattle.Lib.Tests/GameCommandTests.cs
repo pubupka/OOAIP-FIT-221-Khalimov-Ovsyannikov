@@ -1,5 +1,5 @@
+﻿using Hwdtech;
 using Hwdtech.Ioc;
-using Hwdtech;
 
 namespace SpaceBattle.Lib.Tests
 {
@@ -18,7 +18,7 @@ namespace SpaceBattle.Lib.Tests
             var q = new Queue<ICommand>();
             var getQuantStrategy = new Mock<IStrategy>();
             getQuantStrategy.Setup(s => s.Invoke()).Returns(30);
-            
+
             var cmd1 = new Mock<ICommand>();
             cmd1.Setup(c => c.Execute()).Callback(() => { getQuantStrategy.Setup(s => s.Invoke()).Returns(0); }).Verifiable();
 
@@ -27,7 +27,6 @@ namespace SpaceBattle.Lib.Tests
 
             q.Enqueue(cmd1.Object);
             q.Enqueue(cmd2.Object);
-
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.GetQuant", (object[] args) => getQuantStrategy.Object.Invoke()).Execute();
 
@@ -44,7 +43,7 @@ namespace SpaceBattle.Lib.Tests
             var scope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", scope).Execute();
             var q = new Queue<ICommand>();
-            
+
             var cmd1 = new Mock<ICommand>();
             cmd1.Setup(c => c.Execute()).Throws<Exception>();
 
