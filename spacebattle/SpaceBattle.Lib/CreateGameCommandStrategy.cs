@@ -1,17 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
-using Hwdtech.Ioc;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
     public class CreateGameCommandStrategy
     {
-        public object Invoke(object[] args)
+        public static object Invoke(object[] args)
         {
-            string gameId = (string)args[0];
+            var gameId = (string)args[0];
             var parentScope = (object)args[1];
             var quantum = (int)args[2];
 
