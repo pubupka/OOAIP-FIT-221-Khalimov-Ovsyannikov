@@ -1,13 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SpaceBattle.Lib
+﻿namespace SpaceBattle.Lib
 {
     public class MacroComand
     {
-        public List<ICommand> _cmds;
+        private readonly List<ICommand> _cmds;
 
         public MacroComand(List<ICommand> cmds)
         {
