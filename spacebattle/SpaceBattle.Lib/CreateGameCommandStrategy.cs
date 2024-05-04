@@ -2,9 +2,9 @@
 
 namespace SpaceBattle.Lib
 {
-    public class CreateGameCommandStrategy
+    public class CreateGameCommandStrategy : IStrategy
     {
-        public static object Invoke(object[] args)
+        public object Invoke(object[] args)
         {
             var gameId = (string)args[0];
             var parentScope = (object)args[1];

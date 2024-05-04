@@ -1,8 +1,8 @@
 ﻿namespace SpaceBattle.Lib
 {
-    public class DeleteGameCommandStrategy
+    public class DeleteGameCommandStrategy : IStrategy
     {
-        public static object Invoke(params object[] args)
+        public object Invoke(params object[] args)
         {
             var gameId = (string)args[0];
 
