@@ -12,9 +12,10 @@ namespace SpaceBattle.Lib
         {
             var gameDict = IoC.Resolve<IDictionary<string, IInjectable>>("Game.Dict");
             var emptyCmd = IoC.Resolve<ICommand>("Game.Command.EmptyCommand");
-            gameDict[_gameId].Inject(emptyCmd);
+            var key = _gameId;
+            gameDict[key].Inject(emptyCmd);
             var gameScopes = IoC.Resolve<IDictionary<string, object>>("Game.Scope.Dict");
-            gameScopes.Remove(_gameId);
+            gameScopes.Remove(key);
         }
     }
 }
