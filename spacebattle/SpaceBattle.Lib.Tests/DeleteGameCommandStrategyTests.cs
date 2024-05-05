@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib.Tests
@@ -20,13 +16,13 @@ namespace SpaceBattle.Lib.Tests
         {
             var mockGame = new InjectCommand(new EmptyCommand());
             var emptyCmd = new EmptyCommand();
-            var dictOfgames = new Dictionary<string, IInjectable>(){{"asdfg", mockGame}};
-            var dictOfScopes = new Dictionary<string, object>(){{"asdfg", 0}};
+            var dictOfgames = new Dictionary<string, IInjectable>() { { "asdfg", mockGame } };
+            var dictOfScopes = new Dictionary<string, object>() { { "asdfg", 0 } };
 
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.DeleteGameCommandStrategy", (object[] args) => new DeleteGameCommandStrategy().Invoke(args)).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Dict", (object[] args)=> dictOfgames).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Scope.Dict",(object[] args)=> dictOfScopes).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.EmptyCommand", (object[] args)=> emptyCmd).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Dict", (object[] args) => dictOfgames).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Scope.Dict", (object[] args) => dictOfScopes).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.EmptyCommand", (object[] args) => emptyCmd).Execute();
 
             Assert.Single(dictOfgames);
             Assert.Single(dictOfScopes);
