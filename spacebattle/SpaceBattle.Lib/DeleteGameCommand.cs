@@ -1,4 +1,5 @@
-﻿namespace SpaceBattle.Lib
+﻿using Hwdtech;
+namespace SpaceBattle.Lib
 {
     public class DeleteGameCommand : ICommand
     {
@@ -9,7 +10,11 @@
         }
         public void Execute()
         {
-
+            var gameDict = IoC.Resolve<IDictionary<string, IInjectable>>("Game.Dict");
+            var emptyCmd = IoC.Resolve<ICommand>("Game.Command.EmptyCommand");
+            gameDict[_gameId].Inject(emptyCmd);
+            var gameScopes = IoC.Resolve<IDictionary<string, object>>("Game.Scope.Dict");
+            gameScopes.Remove(_gameId);
         }
     }
 }
