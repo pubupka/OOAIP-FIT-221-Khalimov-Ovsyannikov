@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Hwdtech;
 
 namespace SpaceBattle.Lib
 {
@@ -11,8 +8,8 @@ namespace SpaceBattle.Lib
         {
             var objectId = (int)args[0];
 
-            var dictOfUobjects = IoC.Resolve<IDictionary<int, IUObject>>("Game.UObject.Dict")[objectId];
-            return new ActionCommand(()=>{dictOfUobjects.Remove(objectId)});
+            var dictOfUobjects = IoC.Resolve<IDictionary<int, IUObject>>("Game.UObject.Dict");
+            return new ActionCommand(() => { dictOfUobjects.Remove(objectId); });
         }
     }
 }
