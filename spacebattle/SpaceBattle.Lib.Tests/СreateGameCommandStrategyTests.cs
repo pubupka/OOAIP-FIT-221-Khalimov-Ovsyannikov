@@ -52,5 +52,37 @@ namespace SpaceBattle.Lib.Tests
             Assert.Single(threadCollection);
             mockCmd.Verify(x => x.Execute(), Times.Exactly(2));
         }
+
+        [Fact]
+        public void CreateGameCommandStrategyCreatedGameCommandCantBeExecuted()
+        {
+            var mockCmd = new Mock<ICommand>();
+            mockCmd.Setup(x => x.Execute()).Throws(new Exception());
+
+            var gameDict = new Dictionary<string, ICommand>();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.CreateGameCommandStrategy", (object[] args) => new CreateGameCommandStrategy().Invoke(args)).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Dict", (object[] args) => gameDict).Execute();
+
+            var threadCollection = new BlockingCollection<ICommand>();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Server.Thread.Games", (object[] args) => threadCollection).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Scope.New", (object[] args) => (object)0).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Queue.New", (object[] args) => new Queue<ICommand>()).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command", (object[] args) => mockCmd.Object).Execute();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Inject", (object[] args) => new InjectCommand((ICommand)args[0])).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Command.Concurrent.Repeat", (object[] args) => new RepeatConcurrentCommand((ICommand)args[0])).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Macro", (object[] args) =>
+            {
+                var cmds = (List<ICommand>)args[0];
+                return new MacroComand(cmds);
+            }).Execute();
+
+            var gameCmd = IoC.Resolve<ICommand>("Game.CreateGameCommandStrategy", "asdfg", IoC.Resolve<object>("Scopes.Current"), 5);
+
+            threadCollection.Add(gameCmd);
+
+            Assert.Throws<Exception>(() => threadCollection.Take().Execute());
+        }
     }
 }
