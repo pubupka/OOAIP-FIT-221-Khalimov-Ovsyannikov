@@ -7,8 +7,9 @@ namespace SpaceBattle.Lib
         public object Invoke(object[] args)
         {
             var objectId = (int)args[0];
+            var gameId = (string)args[1];
 
-            var uobject = IoC.Resolve<IDictionary<int, IUObject>>("Game.UObject.Dict")[objectId];
+            var uobject = IoC.Resolve<IDictionary<int, IUObject>>("Game.UObject.Dict", gameId)[objectId];
             return uobject;
         }
     }
