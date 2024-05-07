@@ -2,7 +2,7 @@
 
 namespace SpaceBattle.Lib
 {
-    public class EndMovementCommand
+    public class EndMovementCommand : ICommand
     {
         private readonly IEndable _endable;
 
