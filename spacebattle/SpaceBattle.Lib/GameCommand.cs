@@ -20,7 +20,7 @@ namespace SpaceBattle.Lib
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _scope).Execute();
             _sw.Reset();
 
-            while (_sw.ElapsedMilliseconds < (int)IoC.Resolve<object>("Game.GetQuant"))
+            while (_sw.ElapsedMilliseconds < IoC.Resolve<int>("Game.GetQuant"))
             {
                 if (_q.Count == 0)
                 {
@@ -36,7 +36,16 @@ namespace SpaceBattle.Lib
                 }
                 catch (Exception e)
                 {
-                    IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
+                    var handleTree = IoC.Resolve<Dictionary<Type, object>>("Game.GetHandleTree");
+                    if (handleTree.ContainsKey(cmd.GetType()))
+                    {
+                        IoC.Resolve<IHandler>("FindHandler", cmd, e).Handle();
+                    }
+                    else
+                    {
+                        e.Data["ThrownByCommand"] = cmd;
+                        throw;
+                    }
                 }
                 finally
                 {
