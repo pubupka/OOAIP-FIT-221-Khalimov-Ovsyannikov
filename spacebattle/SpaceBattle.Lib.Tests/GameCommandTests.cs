@@ -57,7 +57,7 @@ namespace SpaceBattle.Lib.Tests
 
             var handleCommand = new Mock<ICommand>();
             handleCommand.Setup(c => c.Execute()).Verifiable();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Exception.Handle", (object[] args) => handleCommand.Object).Execute();
+            new InitExceptionHandlerCommand(handleCommand.Object).Execute();
 
             var gameCommand = new GameCommand(q, scope);
             gameCommand.Execute();

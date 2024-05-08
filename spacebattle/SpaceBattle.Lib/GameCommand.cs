@@ -18,6 +18,7 @@ namespace SpaceBattle.Lib
         public void Execute()
         {
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", _scope).Execute();
+            _sw.Reset();
 
             while (_sw.ElapsedMilliseconds < (int)IoC.Resolve<object>("Game.GetQuant"))
             {
@@ -37,8 +38,10 @@ namespace SpaceBattle.Lib
                 {
                     IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
                 }
-
-                _sw.Stop();
+                finally
+                {
+                    _sw.Stop();
+                }
             }
         }
     }
