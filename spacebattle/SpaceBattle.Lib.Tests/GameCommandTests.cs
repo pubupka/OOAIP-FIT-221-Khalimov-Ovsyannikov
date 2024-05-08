@@ -96,7 +96,7 @@ namespace SpaceBattle.Lib.Tests
             new InitTreeCommand(new Dictionary<Type, object>()).Execute();
 
             var gameCommand = new GameCommand(q, scope);
-            
+
             Assert.Throws<FileNotFoundException>(gameCommand.Execute);
             cmd2.Verify(c => c.Execute(), Times.Never());
         }
