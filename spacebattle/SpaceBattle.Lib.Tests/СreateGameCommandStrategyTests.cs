@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib.Tests
@@ -53,7 +52,7 @@ namespace SpaceBattle.Lib.Tests
 
             var gameCmd = IoC.Resolve<ICommand>("Game.CreateGameCommandStrategy", "asdfg", IoC.Resolve<object>("Scopes.Current"), 5);
 
-            Assert.Throws<Exception>(()=>gameCmd.Execute());
+            Assert.Throws<Exception>(() => gameCmd.Execute());
         }
     }
 }
