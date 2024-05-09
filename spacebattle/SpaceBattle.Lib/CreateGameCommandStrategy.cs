@@ -14,11 +14,7 @@ namespace SpaceBattle.Lib
             var gameQueue = IoC.Resolve<Queue<ICommand>>("Game.Queue.New");
             var gameCmd = IoC.Resolve<ICommand>("Game.Command", gameQueue, gameScope);
 
-            var cmdList = new List<ICommand> { gameCmd };
-            var macroCmd = IoC.Resolve<ICommand>("Game.Command.Macro", cmdList);
-            var injectCmd = IoC.Resolve<ICommand>("Game.Command.Inject", macroCmd);
-            var repeatConcurrentCmd = IoC.Resolve<ICommand>("Command.Concurrent.Repeat", injectCmd);
-            cmdList.Add(repeatConcurrentCmd);
+            var injectCmd = IoC.Resolve<ICommand>("Game.Command.Inject", gameCmd);
 
             var gameDict = IoC.Resolve<IDictionary<string, ICommand>>("Game.Dict");
             gameDict.Add(gameId, injectCmd);
