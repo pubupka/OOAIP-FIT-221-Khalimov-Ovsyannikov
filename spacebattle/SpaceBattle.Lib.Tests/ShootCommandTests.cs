@@ -28,5 +28,56 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<ICommand>("Game.Command.ShootCommand", mockShootable.Object).Execute();
             mockCmd.Verify(x => x.Execute(), Times.Once());
         }
+
+        [Fact]
+        public void CantDeterminePosition()
+        {
+            var mockShootable = new Mock<IShootable>();
+            mockShootable.SetupGet(x => x.type).Returns("rocket");
+            mockShootable.SetupGet(x => x.velocity).Returns(new Vector(new int[] { 1, 2 }));
+            mockShootable.SetupGet(x => x.position).Throws(new Exception());
+
+            var mockCmd = new Mock<ICommand>();
+            mockCmd.Setup(x => x.Execute()).Verifiable();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.ShootCommand", (object[] args) => new ShootCommand((IShootable)args[0])).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Move", (object[] args) => mockCmd.Object).Execute();
+
+            Assert.Throws<Exception>(() => IoC.Resolve<ICommand>("Game.Command.ShootCommand", mockShootable.Object).Execute());
+        }
+
+        [Fact]
+        public void CantDetermineVelocity()
+        {
+            var mockShootable = new Mock<IShootable>();
+            mockShootable.SetupGet(x => x.type).Returns("rocket");
+            mockShootable.SetupGet(x => x.velocity).Throws(new Exception());
+            mockShootable.SetupGet(x => x.position).Returns(new Vector(new int[] { 1, 2 }));
+
+            var mockCmd = new Mock<ICommand>();
+            mockCmd.Setup(x => x.Execute()).Verifiable();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.ShootCommand", (object[] args) => new ShootCommand((IShootable)args[0])).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Move", (object[] args) => mockCmd.Object).Execute();
+
+            Assert.Throws<Exception>(() => IoC.Resolve<ICommand>("Game.Command.ShootCommand", mockShootable.Object).Execute());
+        }
+
+        [Fact]
+        public void CantMoveProjectile()
+        {
+            var mockShootable = new Mock<IShootable>();
+            mockShootable.SetupGet(x => x.type).Returns("rocket");
+            mockShootable.SetupGet(x => x.velocity).Returns(new Vector(new int[] { 1, 2 }));
+            mockShootable.SetupGet(x => x.position).Returns(new Vector(new int[] { 1, 2 }));
+
+            var mockCmd = new Mock<ICommand>();
+            mockCmd.Setup(x => x.Execute()).Throws(new Exception());
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.ShootCommand", (object[] args) => new ShootCommand((IShootable)args[0])).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Command.Move", (object[] args) => mockCmd.Object).Execute();
+
+            Assert.Throws<Exception>(() => IoC.Resolve<ICommand>("Game.Command.ShootCommand", mockShootable.Object).Execute());
+        }
     }
 }
