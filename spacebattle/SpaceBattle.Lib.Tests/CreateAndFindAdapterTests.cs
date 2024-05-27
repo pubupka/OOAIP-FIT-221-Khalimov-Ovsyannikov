@@ -22,7 +22,6 @@ namespace SpaceBattle.Lib.Tests
         public void CreateAndFindAdapterTestsPositive()
         {
             var mockIUobj = new Mock<IUObject>();
-            var targetType = new Mock<IMovable>().Object.GetType();
 
             var dictOfAssemblies = new Dictionary<KeyValuePair<Type, Type>, Assembly>();
             var references = new List<MetadataReference> {
@@ -72,15 +71,15 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.FindAdapter", (object[] args) => new FindAdapterStrategy().Invoke(args)).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Adapter.Name", (object[] args) =>
             {
-                return args[0].ToString()+"Adapter";
+                return $"SpaceBattle.Lib.{args[0].ToString()}Adapter";
             }).Execute();
 
-            var obj = IoC.Resolve<IMovable>("Game.CreateAdapterStrategy", mockIUobj.Object, targetType);
+            var obj = IoC.Resolve<IMovable>("Game.CreateAdapterStrategy", mockIUobj.Object, typeof(IMovable));
 
             Assert.NotNull(obj);
 
-            dictOfAssemblies.TryGetValue(new KeyValuePair<Type, Type>(mockIUobj.Object.GetType(), targetType), out var assembly);
-            Assert.Equal("SpaceBattle.Lib.IMovableAdapter", assembly!.GetType(IoC.Resolve<string>("Game.Adapter.Name", targetType))!.ToString());
+            dictOfAssemblies.TryGetValue(new KeyValuePair<Type, Type>(mockIUobj.Object.GetType(), typeof(IMovable)), out var assembly);
+            Assert.Equal("SpaceBattle.Lib.IMovableAdapter", assembly!.GetType(IoC.Resolve<string>("Game.Adapter.Name", typeof(IMovable)))!.ToString());
 
             Assert.Equal(obj.Position, new Vector(new int[] { 0, 0 }));
         }
