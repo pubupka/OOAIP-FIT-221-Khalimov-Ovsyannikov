@@ -65,7 +65,8 @@ namespace SpaceBattle.Lib.Tests
                 return new ActionCommand(() => { dictOfAssemblies.Add(key, (Assembly)args[2]); });
             }).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.FindAdapter", (object[] args) => new FindAdapterStrategy().Invoke(args)).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Get.Assembly.DictOfAssemblies", (object[] args) =>{
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Get.Assembly.DictOfAssemblies", (object[] args) =>
+            {
                 var key = new KeyValuePair<Type, Type>((Type)args[0], (Type)args[1]);
                 return dictOfAssemblies[key];
             }).Execute();

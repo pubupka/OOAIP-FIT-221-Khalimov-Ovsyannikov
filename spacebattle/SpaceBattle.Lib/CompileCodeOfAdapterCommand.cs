@@ -8,9 +8,9 @@ namespace SpaceBattle.Lib
         private readonly Type _primaryType;
         private readonly Type _targetType;
 
-        public CompileCodeOfAdapterCommand(Type objectType, Type targetType)
+        public CompileCodeOfAdapterCommand(Type primaryType, Type targetType)
         {
-            _primaryType = oprimaryType;
+            _primaryType = primaryType;
             _targetType = targetType;
         }
 
