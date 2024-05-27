@@ -10,10 +10,7 @@ namespace SpaceBattle.Lib
             var uObject = (IUObject)args[0];
             var targetType = (Type)args[1];
 
-            var dictOfAssemblies = IoC.Resolve<IDictionary<KeyValuePair<Type, Type>, Assembly>>("Game.Get.DictOfAssemblies");
-            var key = new KeyValuePair<Type, Type>(uObject.GetType(), targetType);
-
-            var assembly = dictOfAssemblies[key];
+            var assembly = IoC.Resolve<Assembly>("Game.Get.Assembly.DictOfAssemblies", uObject.GetType(), targetType);
             var type = assembly.GetType(IoC.Resolve<string>("Game.Adapter.Name", targetType))!;
 
             return Activator.CreateInstance(type, uObject)!;

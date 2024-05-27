@@ -8,13 +8,14 @@ namespace SpaceBattle.Lib
         public object Invoke(params object[] args)
         {
             var uObject = (IUObject)args[0];
+            var originType = uObject.GetType();
             var targetType = (Type)args[1];
 
-            var adapterAssemblyMap = IoC.Resolve<IDictionary<KeyValuePair<Type, Type>, Assembly>>("Game.Get.DictOfAssemblies");
-            var pair = new KeyValuePair<Type, Type>(uObject.GetType(), targetType);
-            if (!adapterAssemblyMap.TryGetValue(pair, out _))
+            var dictOfAssemblies = IoC.Resolve<IDictionary<KeyValuePair<Type, Type>, Assembly>>("Game.Get.DictOfAssemblies");
+            var key = new KeyValuePair<Type, Type>(originType, targetType);
+            if (!dictOfAssemblies.ContainsKey(key))
             {
-                IoC.Resolve<ICommand>("Game.GenerateAdapter", uObject.GetType(), targetType).Execute();
+                IoC.Resolve<ICommand>("Game.GenerateAdapter", originType, targetType).Execute();
             }
 
             return IoC.Resolve<object>("Game.FindAdapter", uObject, targetType);
