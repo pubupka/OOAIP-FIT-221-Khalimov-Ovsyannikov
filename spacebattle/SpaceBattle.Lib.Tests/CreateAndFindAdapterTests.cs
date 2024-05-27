@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hwdtech;
+using Hwdtech.Ioc;
+using Microsoft.CodeAnalysis;
+using System.Reflection;
 
 namespace SpaceBattle.Lib.Tests
 {
@@ -38,7 +42,7 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Adapter.Code", (object[] args) =>
             {
                 return
-            @"namespace SpaceBattle.Lib;
+            @"namespace SpaceBattle.Lib{
             public class IMovableAdapter : IMovable
             {
                 private IUObject _uObject;
@@ -52,6 +56,7 @@ namespace SpaceBattle.Lib.Tests
                 {
                     get => new Vector(new int[] { 1, 1 });
                 }
+            }
             }
             ";
             }).Execute();
@@ -67,7 +72,7 @@ namespace SpaceBattle.Lib.Tests
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.FindAdapter", (object[] args) => new FindAdapterStrategy().Invoke(args)).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Adapter.Name", (object[] args) =>
             {
-                return "SpaceBattle.Lib.IMovable" + "Adapter";
+                return args[0].ToString()+"Adapter";
             }).Execute();
 
             var obj = IoC.Resolve<IMovable>("Game.CreateAdapterStrategy", mockIUobj.Object, targetType);
