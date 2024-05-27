@@ -84,5 +84,89 @@ namespace SpaceBattle.Lib.Tests
 
             Assert.Equal(obj.Position, new Vector(new int[] { 0, 0 }));
         }
+
+        [Fact]
+        public void CantAddNewAssembly()
+        {
+            var mockIUobj = new Mock<IUObject>();
+
+            var dictOfAssemblies = new Dictionary<KeyValuePair<Type, Type>, Assembly>();
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.CompileCodeCommand", (object[] args) =>
+            {
+                var objType = (Type)args[0];
+                var targetType = (Type)args[1];
+                return new CompileCodeOfAdapterCommand(objType, targetType);
+            }).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Adapter.Code", (object[] args) =>
+            {
+                return
+            @"namespace SpaceBattle.Lib{
+            public class IMovableAdapter : IMovable
+            {
+                private IUObject _uObject;
+                public IMovableAdapter(IUObject uObject) { _uObject = uObject;}
+                public Vector Position
+                {
+                    get => new Vector(new int[] { 0, 0 });
+                    set => new Vector(new int[] { 0, 0 });
+                }
+                public Vector Velocity
+                {
+                    get => new Vector(new int[] { 1, 1 });
+                }
+            }
+            }
+            ";
+            }).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Code.Compile", (object[] args) =>
+            {
+                var assembly = typeof(IMovable).Assembly;
+                return assembly;
+            }).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Adapter.TypesAssemblyDict.AddNewElement", (object[] args) =>
+            {
+                var key = new KeyValuePair<Type, Type>((Type)args[0], (Type)args[1]);
+
+                return new ActionCommand(() => { throw new Exception(); });
+            }).Execute();
+
+            Assert.Throws<Exception>(() => { IoC.Resolve<ICommand>("Game.CompileCodeCommand", mockIUobj.Object.GetType(), typeof(IMovable)).Execute(); });
+        }
+
+        [Fact]
+        public void CantCompileCode()
+        {
+            var mockIUobj = new Mock<IUObject>();
+
+            var dictOfAssemblies = new Dictionary<KeyValuePair<Type, Type>, Assembly>();
+            var references = new List<MetadataReference> {
+            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+            MetadataReference.CreateFromFile(Assembly.Load("SpaceBattle.Lib").Location)
+            };
+
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.CompileCodeCommand", (object[] args) =>
+            {
+                var objType = (Type)args[0];
+                var targetType = (Type)args[1];
+                return new CompileCodeOfAdapterCommand(objType, targetType);
+            }).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Adapter.Code", (object[] args) =>
+            {
+                return
+            @"
+            class IMovableAdapter
+            {
+                def __init__(self, obj):
+                self.obj = obj
+            }
+            ";
+            }).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.Code.Compile", (object[] args) => new CompileCodeStrategy().Invoke(args)).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Assembly.Name.Create", (object[] args) => Guid.NewGuid().ToString()).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Compile.References", (object[] args) => references).Execute();
+
+            Assert.Throws<BadImageFormatException>(() => { IoC.Resolve<ICommand>("Game.CompileCodeCommand", mockIUobj.Object.GetType(), typeof(IMovable)).Execute(); });
+        }
     }
 }
