@@ -1,18 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 using Hwdtech;
-using Hwdtech.Ioc;
-using Microsoft.CodeAnalysis;
-using System.Reflection;
 
 namespace SpaceBattle.Lib
 {
     public class CompileCodeOfAdapterCommand : ICommand
     {
-        private Type _objectType;
-        private Type _targetType;
+        private readonly Type _objectType;
+        private readonly Type _targetType;
 
         public CompileCodeOfAdapterCommand(Type objectType, Type targetType)
         {
