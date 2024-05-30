@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using Hwdtech;
 
 namespace SpaceBattle.Lib
@@ -15,7 +15,8 @@ namespace SpaceBattle.Lib
         {
             var uObjectsTable = IoC.Resolve<Hashtable>("Game.GetUObjects");
 
-            Enumerable.Range(0, _count).ToList().ForEach(index => {
+            Enumerable.Range(0, _count).ToList().ForEach(index =>
+            {
                 uObjectsTable.Add(index, IoC.Resolve<IUObject>("Game.UObject.Empty.Create"));
             });
         }

@@ -1,4 +1,4 @@
-using Hwdtech;
+﻿using Hwdtech;
 using Hwdtech.Ioc;
 
 namespace SpaceBattle.Lib
@@ -34,7 +34,7 @@ namespace SpaceBattle.Lib
         public void SetPositions_Negative()
         {
             var obj = new Mock<IUObject>();
-            var uObjects = new List<IUObject>() { obj.Object};
+            var uObjects = new List<IUObject>() { obj.Object };
             var setPosCmd = new Mock<ICommand>();
             setPosCmd.Setup(x => x.Execute()).Throws<NotImplementedException>();
 
@@ -65,7 +65,7 @@ namespace SpaceBattle.Lib
         public void SetFuel_Negative()
         {
             var obj = new Mock<IUObject>();
-            var uObjects = new List<IUObject>() { obj.Object};
+            var uObjects = new List<IUObject>() { obj.Object };
             var setFuelCmd = new Mock<ICommand>();
             setFuelCmd.Setup(x => x.Execute()).Throws<NotImplementedException>();
 
