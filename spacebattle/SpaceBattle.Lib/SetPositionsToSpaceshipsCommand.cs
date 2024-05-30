@@ -18,7 +18,7 @@ namespace SpaceBattle.Lib
 
             _uObjects.ForEach(u =>
             {
-                IoC.Resolve<ICommand>("Game.IUObject.SetProperty", u, "Position", positionsEnumerator.Current);
+                IoC.Resolve<ICommand>("Game.IUObject.SetProperty", u, "Position", positionsEnumerator.Current).Execute();
                 positionsEnumerator.MoveNext();
             });
 

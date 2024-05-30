@@ -18,7 +18,7 @@ namespace SpaceBattle.Lib
 
             _uObjects.ForEach(u =>
             {
-                IoC.Resolve<ICommand>("Game.IUObject.SetProperty", u, "FuelCapacity", fuelCapacitiesEnumerator.Current);
+                IoC.Resolve<ICommand>("Game.IUObject.SetProperty", u, "FuelCapacity", fuelCapacitiesEnumerator.Current).Execute();
                 fuelCapacitiesEnumerator.MoveNext();
             });
 
