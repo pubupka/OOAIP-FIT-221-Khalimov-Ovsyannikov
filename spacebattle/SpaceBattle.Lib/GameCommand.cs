@@ -36,16 +36,7 @@ namespace SpaceBattle.Lib
                 }
                 catch (Exception e)
                 {
-                    var handleTree = IoC.Resolve<Dictionary<Type, object>>("Game.GetHandleTree");
-                    if (handleTree.ContainsKey(cmd.GetType()))
-                    {
-                        IoC.Resolve<IHandler>("FindHandler", cmd, e).Handle();
-                    }
-                    else
-                    {
-                        e.Data["ThrownByCommand"] = cmd;
-                        throw;
-                    }
+                    IoC.Resolve<ICommand>("Game.Exception.Handle", cmd, e).Execute();
                 }
                 finally
                 {

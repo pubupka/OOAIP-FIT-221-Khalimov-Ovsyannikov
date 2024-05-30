@@ -15,6 +15,7 @@ namespace SpaceBattle.Lib.Tests
         {
             var scope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", scope).Execute();
+            new InitHandleCommand().Execute();
             var q = new Queue<ICommand>();
             var getQuantStrategy = new Mock<IStrategy>();
             getQuantStrategy.Setup(s => s.Invoke()).Returns(30);
@@ -42,6 +43,7 @@ namespace SpaceBattle.Lib.Tests
         {
             var scope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", scope).Execute();
+            new InitHandleCommand().Execute();
             var q = new Queue<ICommand>();
 
             var cmd1 = new Mock<ICommand>();
@@ -80,6 +82,7 @@ namespace SpaceBattle.Lib.Tests
         {
             var scope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", scope).Execute();
+            new InitHandleCommand().Execute();
             var q = new Queue<ICommand>();
 
             var cmd1 = new Mock<ICommand>();
