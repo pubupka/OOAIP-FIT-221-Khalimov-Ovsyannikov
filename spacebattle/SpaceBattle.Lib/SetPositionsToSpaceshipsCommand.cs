@@ -2,11 +2,11 @@
 
 namespace SpaceBattle.Lib
 {
-    public class InitSpaceshipsCommand : ICommand
+    public class SetPositionsToSpaceshipsCommand : ICommand
     {
         private readonly List<IUObject> _uObjects;
         private readonly List<Vector> _positions;
-        public InitSpaceshipsCommand(List<IUObject> uObjects, List<Vector> positions)
+        public SetPositionsToSpaceshipsCommand(List<IUObject> uObjects, List<Vector> positions)
         {
             _uObjects = uObjects;
             _positions = positions;
