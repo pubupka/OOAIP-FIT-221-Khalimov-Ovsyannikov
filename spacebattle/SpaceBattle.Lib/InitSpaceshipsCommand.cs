@@ -14,7 +14,7 @@ namespace SpaceBattle.Lib
 
         public void Execute()
         {
-            System.Collections.IEnumerator positionsEnumerator = _positions.GetEnumerator();
+            IEnumerator<Vector> positionsEnumerator = _positions.GetEnumerator();
 
             _uObjects.ForEach(u =>
             {
