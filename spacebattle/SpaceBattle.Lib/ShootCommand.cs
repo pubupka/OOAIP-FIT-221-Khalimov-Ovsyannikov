@@ -11,7 +11,8 @@ namespace SpaceBattle.Lib
         }
         public void Execute()
         {
-            IoC.Resolve<ICommand>("Game.Command.Move", _shot.type, _shot.velocity, _shot.position).Execute();
+            var projectile = IoC.Resolve<IMovable>("Game.Adapter.Create.Movable", _shot);
+            IoC.Resolve<ICommand>("Game.Command.StartMove", projectile).Execute();
         }
     }
 }
